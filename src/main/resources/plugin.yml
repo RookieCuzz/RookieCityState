@@ -1,0 +1,23 @@
+name: RookieCityState
+main: com.cuzz.rookiecitystate.RookieCityState
+author: July_ss
+version: ${project.version}
+api-version: '1.21'
+depend:
+  - Vault
+softdepend:
+  - PlayerPoints
+  - PlaceholderAPI
+commands:
+  citystate:
+    description: RookieCityState 城邦主命令
+    usage: /<command> [gui|plugin|logger|helper]
+    aliases:
+      - cs
+permissions:
+  rookiecitystate.admin:
+    description: 允许使用 RookieCityState 管理命令
+    default: op
+  rookiecitystate.create.colored:
+    description: 允许创建带颜色的城邦名
+    default: op

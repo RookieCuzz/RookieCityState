@@ -1,0 +1,109 @@
+name: Shop2
+title: '&e&l城邦商店(2/2)'
+row: 6
+other_items:
+  glass:
+    indexes: '47-49,51-53'
+    icon:
+      material: WHITE_STAINED_GLASS_PANE
+      display_name: ''
+      lores:
+        - '&cby July_ss'
+simple_confirm_gui: &simple_confirm_gui
+  row: 3
+  title: '&c&l确认支付'
+  items:
+    confirm:
+      index: 14
+      icon:
+        material: NETHER_STAR
+        display_name: '&a确认'
+        lores:
+          - ' &e支付城邦币: {price}'
+    cancel:
+      index: 27
+      icon:
+        material: ARROW
+        display_name: '&c返回'
+items:
+  '11':
+    index: 11
+    icon:
+      material: GOLD_INGOT
+      display_name: ' &f购买金锭图标'
+      lores:
+        - ' &f花费城邦币: {price}'
+    reward_type: CITY_STATE_ICON
+    sell:
+      price: 1000
+      success_message: '&f购买城邦图标 {display_name} &f成功, 花费城邦币: x{price}.'
+      ConfirmGUI: *simple_confirm_gui
+      city_state_icon:
+        material: GOLD_INGOT
+        display_name: '&e金锭'
+  '12':
+    index: 12
+    icon:
+      material: DIAMOND
+      display_name: ' &f购买钻石图标'
+      lores:
+        - ' &f花费城邦币: {price}'
+    reward_type: CITY_STATE_ICON
+    sell:
+      price: 1000
+      success_message: '&f购买城邦图标 {display_name} &f成功, 花费城邦币: x{price}.'
+      ConfirmGUI: *simple_confirm_gui
+      city_state_icon:
+        material: DIAMOND
+        display_name: '&b钻石'
+  '13':
+    index: 13
+    icon:
+      material: TNT
+      display_name: ' &f购买TNT图标'
+      lores:
+        - ' &f花费城邦币: {price}'
+    reward_type: CITY_STATE_ICON
+    sell:
+      price: 1000
+      success_message: '&f购买城邦图标 {display_name} &f成功, 花费城邦币: x{price}.'
+      ConfirmGUI: *simple_confirm_gui
+      city_state_icon:
+        material: TNT
+        display_name: '&bTNT'
+  '14':
+    index: 14
+    icon:
+      material: DRAGON_HEAD
+      display_name: ' &f购买龙头图标'
+      lores:
+        - ' &f花费城邦币: {price}'
+    reward_type: CITY_STATE_ICON
+    sell:
+      price: 1000
+      success_message: '&f购买城邦图标 {display_name} &f成功, 花费城邦币: x{price}.'
+      ConfirmGUI: *simple_confirm_gui
+      city_state_icon:
+        material: DRAGON_HEAD
+        display_name: '&b龙头'
+  '50':
+    index: 50
+    icon:
+      material: ARROW
+      display_name: '&c返回'
+    reward_type: BACK
+  '46':
+    index: 46
+    icon:
+      material: BOOK
+      display_name: '&f上一页'
+    reward_type: CITY_STATE_SHOP
+    shop: Shop1
+  '54':
+    index: 54
+    icon:
+      material: BOOK
+      display_name: '&f下一页'
+      lores:
+        - ' &f无'
+    reward_type: NONE
