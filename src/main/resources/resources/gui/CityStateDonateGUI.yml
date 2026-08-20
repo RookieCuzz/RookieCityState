@@ -1,41 +1,51 @@
 row: 6 # move marker
-title: '&e&l捐赠'
+title: '&8✦ &a&l城邦捐赠'
+other_items:
+  frame:
+    indexes: '1-9,10,12,14,16,18-28,30,32,34,36-54'
+    icon: {material: BLACK_STAINED_GLASS_PANE, display_name: ''}
 simple_money_confirm_gui: &simple_money_confirm_gui
   row: 3
-  title: '&c&l确认支付'
+  title: '&8✦ &c&l确认捐赠'
   items:
     confirm:
       index: 14
       icon:
         material: NETHER_STAR
-        display_name: '&a确认'
+        display_name: '&a&l✔ 确认捐赠'
         lores:
-          - ' &e支付方式: 金币'
-          - ' &e支付金额: {price}'
-          - ' &e赞助城邦币: {reward}'
+          - ''
+          - '&8▪ &7支付方式：&6金币'
+          - '&8▪ &7支付金额：&f{price}'
+          - '&8▪ &7城邦获得：&a{reward} 城邦币'
+          - ''
+          - '&a▶ 点击确认'
     cancel:
       index: 27
       icon:
         material: ARROW
-        display_name: '&c返回'
+        display_name: '&c&l← 取消并返回'
 simple_points_confirm_gui: &simple_points_confirm_gui
   row: 3
-  title: '&c&l确认支付'
+  title: '&8✦ &c&l确认捐赠'
   items:
     confirm:
       index: 14
       icon:
         material: NETHER_STAR
-        display_name: '&a确认'
+        display_name: '&a&l✔ 确认捐赠'
         lores:
-          - ' &e支付方式: 点券'
-          - ' &e支付金额: {price}'
-          - ' &e赞助城邦币: {reward}'
+          - ''
+          - '&8▪ &7支付方式：&b点券'
+          - '&8▪ &7支付金额：&f{price}'
+          - '&8▪ &7城邦获得：&a{reward} 城邦币'
+          - ''
+          - '&a▶ 点击确认'
     cancel:
       index: 27
       icon:
         material: ARROW
-        display_name: '&c返回'
+        display_name: '&c&l← 取消并返回'
 donate_items:
   'm1':
     index: 11
@@ -46,10 +56,13 @@ donate_items:
       ConfirmGUI: *simple_money_confirm_gui
     icon:
       material: GOLD_INGOT
-      display_name: '&f赞助 &e{reward}个 &f城邦币'
+      display_name: '&6&l捐赠 {reward} 城邦币'
       lores:
-        - ' &f支付方式: 金币'
-        - ' &f价格: {price}'
+        - ''
+        - '&8▪ &7支付方式：&6金币'
+        - '&8▪ &7价格：&f{price}'
+        - ''
+        - '&e▶ 点击选择'
   'm2':
     index: 13
     donate:
@@ -59,10 +72,13 @@ donate_items:
       ConfirmGUI: *simple_money_confirm_gui
     icon:
       material: GOLD_INGOT
-      display_name: '&f赞助 &e{reward}个 &f城邦币'
+      display_name: '&6&l捐赠 {reward} 城邦币'
       lores:
-        - ' &f支付方式: 金币'
-        - ' &f价格: {price}'
+        - ''
+        - '&8▪ &7支付方式：&6金币'
+        - '&8▪ &7价格：&f{price}'
+        - ''
+        - '&e▶ 点击选择'
   'm3':
     index: 15
     donate:
@@ -72,10 +88,13 @@ donate_items:
       ConfirmGUI: *simple_money_confirm_gui
     icon:
       material: GOLD_INGOT
-      display_name: '&f赞助 &e{reward}个 &f城邦币'
+      display_name: '&6&l捐赠 {reward} 城邦币'
       lores:
-        - ' &f支付方式: 金币'
-        - ' &f价格: {price}'
+        - ''
+        - '&8▪ &7支付方式：&6金币'
+        - '&8▪ &7价格：&f{price}'
+        - ''
+        - '&e▶ 点击选择'
   'm4':
     index: 17
     donate:
@@ -85,10 +104,13 @@ donate_items:
       ConfirmGUI: *simple_money_confirm_gui
     icon:
       material: GOLD_INGOT
-      display_name: '&f赞助 &e{reward}个 &f城邦币'
+      display_name: '&6&l捐赠 {reward} 城邦币'
       lores:
-        - ' &f支付方式: 金币'
-        - ' &f价格: {price}'
+        - ''
+        - '&8▪ &7支付方式：&6金币'
+        - '&8▪ &7价格：&f{price}'
+        - ''
+        - '&e▶ 点击选择'
   'p1':
     index: 29
     donate:
@@ -98,10 +120,13 @@ donate_items:
       ConfirmGUI: *simple_points_confirm_gui
     icon:
       material: DIAMOND
-      display_name: '&f赞助 &e{reward}个 &f城邦币'
+      display_name: '&b&l捐赠 {reward} 城邦币'
       lores:
-        - ' &f支付方式: 点券'
-        - ' &f价格: {price}'
+        - ''
+        - '&8▪ &7支付方式：&b点券'
+        - '&8▪ &7价格：&f{price}'
+        - ''
+        - '&b▶ 点击选择'
   'p2':
     index: 31
     donate:
@@ -111,10 +136,13 @@ donate_items:
       ConfirmGUI: *simple_points_confirm_gui
     icon:
       material: DIAMOND
-      display_name: '&f赞助 &e{reward}个 &f城邦币'
+      display_name: '&b&l捐赠 {reward} 城邦币'
       lores:
-        - ' &f支付方式: 点券'
-        - ' &f价格: {price}'
+        - ''
+        - '&8▪ &7支付方式：&b点券'
+        - '&8▪ &7价格：&f{price}'
+        - ''
+        - '&b▶ 点击选择'
   'p3':
     index: 33
     donate:
@@ -124,10 +152,13 @@ donate_items:
       ConfirmGUI: *simple_points_confirm_gui
     icon:
       material: DIAMOND
-      display_name: '&f赞助 &e{reward}个 &f城邦币'
+      display_name: '&b&l捐赠 {reward} 城邦币'
       lores:
-        - ' &f支付方式: 点券'
-        - ' &f价格: {price}'
+        - ''
+        - '&8▪ &7支付方式：&b点券'
+        - '&8▪ &7价格：&f{price}'
+        - ''
+        - '&b▶ 点击选择'
   'p4':
     index: 35
     donate:
@@ -137,13 +168,17 @@ donate_items:
       ConfirmGUI: *simple_points_confirm_gui
     icon:
       material: DIAMOND
-      display_name: '&f赞助 &e{reward}个 &f城邦币'
+      display_name: '&b&l捐赠 {reward} 城邦币'
       lores:
-        - ' &f支付方式: 点券'
-        - ' &f价格: {price}'
+        - ''
+        - '&8▪ &7支付方式：&b点券'
+        - '&8▪ &7价格：&f{price}'
+        - ''
+        - '&b▶ 点击选择'
 items:
   back:
     index: 50
     icon:
       material: ARROW
-      display_name: '&c返回'
+      display_name: '&c&l← 返回'
+      lores: ['&7返回我的城邦']

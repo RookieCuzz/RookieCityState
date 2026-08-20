@@ -1,0 +1,72 @@
+schema_version: 1
+
+reset:
+  timezone: Asia/Shanghai
+  hour: 4
+
+daily:
+  max_feeds: 5
+  target: 20
+  favorite_count: 3
+  favorite_multiplier: 2
+
+growth:
+  completed_day_thresholds: [3, 8, 18, 33, 53]
+
+models:
+  revision: 1
+  egg: rcs_guardian_egg_r1
+
+species:
+  '1':
+    name: 赤焰龙
+    icon: BLAZE_POWDER
+    baby_model: rcs_guardian_1_baby_r1
+    adult_model: rcs_guardian_1_adult_r1
+  '2':
+    name: 森灵龙
+    icon: OAK_SAPLING
+    baby_model: rcs_guardian_2_baby_r1
+    adult_model: rcs_guardian_2_adult_r1
+  '3':
+    name: 霜晶龙
+    icon: BLUE_ICE
+    baby_model: rcs_guardian_3_baby_r1
+    adult_model: rcs_guardian_3_adult_r1
+
+foods:
+  cod:
+    material: COD
+    nourishment: 1
+    contribution: 1
+  salmon:
+    material: SALMON
+    nourishment: 2
+    contribution: 2
+  tropical_fish:
+    material: TROPICAL_FISH
+    nourishment: 3
+    contribution: 3
+  pufferfish:
+    material: PUFFERFISH
+    nourishment: 4
+    contribution: 4
+  cooked_cod:
+    material: COOKED_COD
+    nourishment: 2
+    contribution: 2
+  cooked_salmon:
+    material: COOKED_SALMON
+    nourishment: 3
+    contribution: 3
+
+visual:
+  anchor:
+    x: -8.5
+    y: 101.0
+    z: 4.5
+    yaw: 0.0
+  interaction:
+    egg: {width: 1.1, height: 1.2}
+    baby: {width: 1.0, height: 1.4}
+    adult: {width: 1.8, height: 2.2}

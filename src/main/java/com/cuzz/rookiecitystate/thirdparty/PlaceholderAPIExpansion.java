@@ -23,6 +23,13 @@ public final class PlaceholderAPIExpansion extends PlaceholderExpansion implemen
         if (params.equalsIgnoreCase("is_in_city_state")) {
             return String.valueOf(plugin.getPlaceholderSnapshotService().isInCityState(player.getUniqueId()));
         }
+        if (params.equalsIgnoreCase("guardian_contribution_available")
+                || params.equalsIgnoreCase("guardian_contribution_lifetime")
+                || params.equalsIgnoreCase("guardian_title")
+                || params.equalsIgnoreCase("guardian_chat_prefix")
+                || params.equalsIgnoreCase("social_week_votes_remaining")) {
+            return plugin.getPlaceholderSnapshotService().get(player.getUniqueId(), params);
+        }
         if (!plugin.getPlaceholderSnapshotService().isInCityState(player.getUniqueId())) {
             return MainSettings.getCityStatePapiNonStr();
         }

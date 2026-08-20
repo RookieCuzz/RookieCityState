@@ -1,0 +1,10 @@
+row: 3
+title: '&8✦ &c&l确认购买'
+other_items:
+  frame:
+    indexes: '1-4,6-12,14,16-27'
+    icon: {material: RED_STAINED_GLASS_PANE, display_name: ''}
+items:
+  product: {index: 5, icon: {material: EMERALD, display_name: '&6&l{product}', lores: ['', '&8▪ &7商品价格：&a{price} 贡献', '&8▪ &7当前可用：&f{available} 贡献']}}
+  confirm: {index: 13, icon: {material: LIME_DYE, display_name: '&a&l✔ 确认购买', lores: ['', '&a点击支付贡献并购买']}}
+  cancel: {index: 15, icon: {material: RED_DYE, display_name: '&c&l✖ 取消', lores: ['', '&7返回贡献商店']}}

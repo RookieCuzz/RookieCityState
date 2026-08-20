@@ -1,0 +1,35 @@
+row: 5
+title: '&8✦ &6&l城邦守护兽'
+other_items:
+  frame:
+    indexes: '1-9,10,18-19,27-28,36-45'
+    icon: {material: ORANGE_STAINED_GLASS_PANE, display_name: ''}
+items:
+  back: {index: 40, icon: {material: ARROW, display_name: '&c&l← 返回', lores: ['&7返回我的城邦']}}
+  info:
+    index: 13
+    icon:
+      material: DRAGON_EGG
+      display_name: '&6&l{species} &fLv.{level}'
+      lores: ['', '&8▪ &7成长形态：&f{form}', '&8▪ &7累计喂满：&a{days} 天', '&8▪ &7今日饱食：&6{fullness}&8/&f{target}', '&8▪ &7模型状态：&f{visual}', '', '&7主手持有效食物右键即可喂养']
+  favorites:
+    index: 21
+    icon: {material: TROPICAL_FISH, display_name: '&d&l今日喜爱食物', lores: ['', '&f{favorites}', '', '&d喜爱食物提供双倍饱食与贡献']}
+  contribution:
+    index: 23
+    icon: {material: EMERALD, display_name: '&a&l我的守护兽贡献', lores: ['', '&8▪ &7今日剩余喂养：&f{feeds_remaining} 次', '&8▪ &7可用贡献：&a{available}', '&8▪ &7累计贡献：&f{lifetime}']}
+  ranking:
+    index: 31
+    icon: {material: BOOK, display_name: '&e&l今日喂养排行', lores: ['', '&f{ranking}', '', '&7展示今日贡献最高的五名成员']}
+  select:
+    index: 33
+    icon: {material: NETHER_STAR, display_name: '&e&l选择守护兽种类', lores: ['', '&7只有会长可以完成首次选择', '&c⚠ 确认后将永久锁定', '', '&e▶ 点击开始选择']}
+  shop:
+    index: 29
+    icon: {material: EMERALD, display_name: '&6&l守护兽贡献商店', lores: ['', '&7使用可用贡献购买每周轮换商品', '', '&6▶ 点击进入商店']}
+  locker:
+    index: 30
+    icon: {material: CHEST, display_name: '&d&l我的守护兽装扮', lores: ['', '&7装备粒子、称号、前缀与互动动作', '', '&d▶ 点击打开装扮柜']}
+  action:
+    index: 32
+    icon: {material: LEAD, display_name: '&b&l播放互动动作', lores: ['', '&7需要站在自己的守护兽 8 格内', '', '&b▶ 点击播放已装备动作']}

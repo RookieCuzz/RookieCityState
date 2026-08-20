@@ -8,8 +8,11 @@ import com.cuzz.rookiecitystate.request.Receiver;
 import com.cuzz.rookiecitystate.request.Sender;
 import com.cuzz.rookiecitystate.internal.io.YamlFiles;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -137,8 +140,46 @@ public class CityStatePlayer implements Sender, Receiver {
         YamlFiles.save(yaml, file);
     }
 
+    public synchronized void rememberWorldReturn(@NotNull Location location) {
+        if (yaml.contains("world_return") || location.getWorld() == null) return;
+        if (!yaml.contains("world_return")) yaml.createSection("world_return");
+        YamlFiles.writeLocation(yaml.getConfigurationSection("world_return"), location);
+        save();
+    }
+
+    public synchronized Location getWorldReturnLocation() {
+        if (!yaml.contains("world_return")) return null;
+        String worldName = yaml.getString("world_return.world");
+        World world = worldName == null ? null : Bukkit.getWorld(worldName);
+        if (world == null) return null;
+        return new Location(world,
+                yaml.getDouble("world_return.x"), yaml.getDouble("world_return.y"), yaml.getDouble("world_return.z"),
+                (float) yaml.getDouble("world_return.yaw"), (float) yaml.getDouble("world_return.pitch"));
+    }
+
+    public synchronized void clearWorldReturnLocation() {
+        if (!yaml.contains("world_return")) return;
+        yaml.set("world_return", null);
+        save();
+    }
+
     public YamlConfiguration getYaml() {
         return yaml;
+    }
+
+    public synchronized void restoreYamlSnapshot(String snapshot) {
+        YamlConfiguration restored = new YamlConfiguration();
+        try { restored.loadFromString(snapshot); }
+        catch (InvalidConfigurationException error) { throw new IllegalStateException("无法恢复玩家数据快照", error); }
+        this.yaml = restored;
+        this.uuid = UUID.fromString(restored.getString("uuid"));
+        this.name = Optional.ofNullable(restored.getString("known_name")).orElse(this.uuid.toString());
+        if (!restored.contains("message_box")) restored.createSection("message_box");
+        this.messageBox = new CityStatePlayerMessageBox(this);
+    }
+
+    public File getDataFile() {
+        return file;
     }
 
     public CityStatePlayerMessageBox getMessageBox() {

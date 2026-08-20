@@ -84,6 +84,34 @@ public final class RequestManager {
         for (File file : files) loadRequest(file);
     }
 
+    public int deletePersistedForCity(UUID cityStateId) {
+        File folder = new File(plugin.getDataFolder(), "data" + File.separator + "requests");
+        File[] files = folder.listFiles((dir, name) -> name.toLowerCase(Locale.ROOT).endsWith(".yml"));
+        if (files == null) return 0;
+        int deleted = 0;
+        for (File file : files) {
+            try {
+                YamlConfiguration yaml = YamlFiles.load(file);
+                if (!referencesCity(yaml, "sender", cityStateId) && !referencesCity(yaml, "receiver", cityStateId)) {
+                    continue;
+                }
+                Files.deleteIfExists(file.toPath());
+                deleted++;
+            } catch (RuntimeException | IOException exception) {
+                PluginLogger.warning("清理解散城邦请求文件失败 " + file.getName() + ": " + exception.getMessage());
+            }
+        }
+        return deleted;
+    }
+
+    private boolean referencesCity(YamlConfiguration yaml, String endpoint, UUID cityStateId) {
+        String type = yaml.getString(endpoint + ".type", "");
+        String cityId = type.equalsIgnoreCase("CITY_STATE_MEMBER")
+                ? yaml.getString(endpoint + ".city_state_uuid")
+                : type.equalsIgnoreCase("CITY_STATE") ? yaml.getString(endpoint + ".uuid") : null;
+        return cityStateId.toString().equals(cityId);
+    }
+
     private void loadRequest(File file) {
         try {
             YamlConfiguration yaml = YamlFiles.load(file);

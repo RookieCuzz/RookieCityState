@@ -3,7 +3,11 @@
 # 管理员看到的GUI
 manager:
   row: 6
-  title: '&e&l成员管理({page}/{total_page})'
+  title: '&8✦ &b&l成员管理 &8· &f{page}/{total_page}'
+  other_items:
+    frame:
+      indexes: '1-9,10,18-19,27-28,36-37,45-54'
+      icon: {material: BLUE_STAINED_GLASS_PANE, display_name: ''}
   items:
     member:
       indexes: '11-17,20-26,29-35'
@@ -11,120 +15,128 @@ manager:
         use_gp: true
         material: PLAYER_HEAD
         skull_texture: 'eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNjU1ZmU2MDdiMDZiMTQwNTQxM2U2ZTI5OTljMmYzNjA0N2ZmNzhmZTc2Njk3MWMxMWIzOTIzNWY2MGUyMmEzZiJ9fX0='
-        display_name: '{member_name}'
+        display_name: '&b&l{member_name}'
         lores:
-          - ' &f城邦: {city_state_name}'
-          - ' &f职位: {member_position}'
-          - ' &f入会时间: {member_join_time}'
-          - ' &f已赞助城邦币: {member_donated_gmoney}'
           - ''
-          - ' &c点击转到管理界面'
+          - '&8▪ &7城邦：&f{city_state_name}'
+          - '&8▪ &7职位：&f{member_position}'
+          - '&8▪ &7加入时间：&f{member_join_time}'
+          - '&8▪ &7累计贡献：&a{member_donated_gmoney} 城邦币'
+          - ''
+          - '&e▶ 点击进入成员管理'
     page_items:
       precious_page:
         have:
           index: 46
           icon:
             material: BOOK
-            display_name: '&f上一页'
+            display_name: '&e&l← 上一页'
             enchantments:
               SHARPNESS: 1
             flags:
               - 'HIDE_ATTRIBUTES'
               - 'HIDE_ENCHANTS'
             lores:
-              - ' &f点击切换'
+              - '&7查看上一页成员'
         not_have:
           index: 46
           icon:
             material: BOOK
-            display_name: '&f上一页'
+            display_name: '&8← 上一页'
             lores:
-              - ' &7没有上一页了'
+              - '&8已经是第一页'
       next_page:
         have:
           index: 54
           icon:
             material: BOOK
-            display_name: '&f下一页'
+            display_name: '&e&l下一页 →'
             enchantments:
               SHARPNESS: 1
             flags:
               - 'HIDE_ATTRIBUTES'
               - 'HIDE_ENCHANTS'
             lores:
-              - ' &f点击切换'
+              - '&7查看下一页成员'
         not_have:
           index: 54
           icon:
             material: BOOK
-            display_name: '&f下一页'
+            display_name: '&8下一页 →'
             lores:
-              - ' &7没有下一页了'
+              - '&8已经是最后一页'
     back:
       index: 50
       icon:
         material: ARROW
-        display_name: '&f返回'
+        display_name: '&c&l← 返回'
+        lores: ['&7返回我的城邦']
 # 玩家或成员看到的GUI
 player:
   row: 6
-  title: '&e&l成员列表({page}/{total_page})'
+  title: '&8✦ &b&l成员列表 &8· &f{page}/{total_page}'
+  other_items:
+    frame:
+      indexes: '1-9,10,18-19,27-28,36-37,45-54'
+      icon: {material: LIGHT_BLUE_STAINED_GLASS_PANE, display_name: ''}
   items:
     member:
       indexes: '11-17,20-26,29-35'
       icon:
         material: PLAYER_HEAD
         skull_texture: 'eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNjU1ZmU2MDdiMDZiMTQwNTQxM2U2ZTI5OTljMmYzNjA0N2ZmNzhmZTc2Njk3MWMxMWIzOTIzNWY2MGUyMmEzZiJ9fX0='
-        display_name: '{member_name}'
+        display_name: '&b&l{member_name}'
         use_papi: true
         lores:
-          - ' &f城邦: {city_state_name}'
-          - ' &f职位: {member_position}'
-          - ' &f入会时间: {member_join_time}'
-          - ' &f已赞助城邦币: {member_donated_gmoney}'
+          - ''
+          - '&8▪ &7城邦：&f{city_state_name}'
+          - '&8▪ &7职位：&f{member_position}'
+          - '&8▪ &7加入时间：&f{member_join_time}'
+          - '&8▪ &7累计贡献：&a{member_donated_gmoney} 城邦币'
     page_items:
       precious_page:
         have:
           index: 46
           icon:
             material: BOOK
-            display_name: '&f上一页'
+            display_name: '&e&l← 上一页'
             enchantments:
               SHARPNESS: 1
             flags:
               - 'HIDE_ATTRIBUTES'
               - 'HIDE_ENCHANTS'
             lores:
-              - ' &f点击切换'
+              - '&7查看上一页成员'
         not_have:
           index: 46
           icon:
             material: BOOK
-            display_name: '&f上一页'
+            display_name: '&8← 上一页'
             lores:
-              - ' &7没有上一页了'
+              - '&8已经是第一页'
       next_page:
         have:
           index: 54
           icon:
             material: BOOK
-            display_name: '&f下一页'
+            display_name: '&e&l下一页 →'
             enchantments:
               SHARPNESS: 1
             flags:
               - 'HIDE_ATTRIBUTES'
               - 'HIDE_ENCHANTS'
             lores:
-              - ' &f点击切换'
+              - '&7查看下一页成员'
         not_have:
           index: 54
           icon:
             material: BOOK
-            display_name: '&f下一页'
+            display_name: '&8下一页 →'
             lores:
-              - ' &7没有下一页了'
+              - '&8已经是最后一页'
     back:
       index: 50
       icon:
         material: ARROW
-        display_name: '&f返回'
+        display_name: '&c&l← 返回'
+        lores: ['&7返回上一级菜单']

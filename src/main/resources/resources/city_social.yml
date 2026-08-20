@@ -1,0 +1,19 @@
+schema_version: 1
+
+time:
+  timezone: Asia/Shanghai
+  reset_hour: 4
+
+visit:
+  qualification_seconds: 60
+
+like:
+  weekly_limit: 5
+
+hot:
+  window_days: 7
+  visitor_weight: 1
+  like_weight: 3
+
+storage:
+  detail_retention_days: 35

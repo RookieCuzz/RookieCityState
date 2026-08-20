@@ -1,48 +1,58 @@
 indexes: '29-35' # move marker
 row: 6
-title: '&e&l管理成员'
+title: '&8✦ &b&l成员权限管理'
 other_items:
+  frame:
+    indexes: '1-9,10-13,15-28,36-54'
+    icon: {material: BLUE_STAINED_GLASS_PANE, display_name: ''}
   member:
     index: 14
     icon:
       material: PLAYER_HEAD
       skull_texture: 'eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNjU1ZmU2MDdiMDZiMTQwNTQxM2U2ZTI5OTljMmYzNjA0N2ZmNzhmZTc2Njk3MWMxMWIzOTIzNWY2MGUyMmEzZiJ9fX0='
-      display_name: '{member_name}'
+      display_name: '&b&l{member_name}'
       lores:
-        - ' &f职位: {member_position}'
-        - ' &f入会时间: {member_join_time}'
-        - ' &f已赞助城邦币: {member_donated_gmoney}'
         - ''
-        - ' &c点击下方图标进行操作'
+        - '&8▪ &7职位：&f{member_position}'
+        - '&8▪ &7加入时间：&f{member_join_time}'
+        - '&8▪ &7累计贡献：&a{member_donated_gmoney} 城邦币'
+        - ''
+        - '&7通过下方按钮调整成员权限'
 items:
   back:
     index: 50
     icon:
       material: ARROW
-      display_name: '&c返回'
+      display_name: '&c&l← 返回'
+      lores: ['&7返回成员列表']
   member_kick:
     priority: 0
     icon:
       material: SHEARS
-      display_name: '&c踢出'
+      display_name: '&c&l移出城邦'
       lores:
-        - '&c将成员移出城邦'
+        - ''
+        - '&7将该成员从当前城邦中移除'
+        - '&c⚠ 此操作需要二次确认'
     ConfirmGUI:
       row: 3
-      title: '&c&l确认'
+      title: '&8✦ &4&l确认移出成员'
       items:
         confirm:
           index: 14
           icon:
             material: NETHER_STAR
-            display_name: '&c确认踢出'
+            display_name: '&4&l✔ 确认移出'
             lores:
-              - ' &c警告: 本操作不可逆, 这将使 &e{target} &c的城邦财产全部清空!'
+              - ''
+              - '&c⚠ 操作不可撤销'
+              - '&7目标成员：&f{target}'
+              - '&7其城邦身份与相关数据将被清理'
         cancel:
           index: 27
           icon:
             material: ARROW
-            display_name: '&c取消操作'
+            display_name: '&c&l← 取消操作'
   per_member_kick:
     give:
       priority: -1
@@ -50,7 +60,8 @@ items:
         material: NAME_TAG
         flags:
           - '*'
-        display_name: '&c给予踢人的权限'
+        display_name: '&a授予 · 移出成员权限'
+        lores: ['', '&7允许该成员移出其他普通成员', '', '&a▶ 点击授予']
     take:
       priority: -1
       icon:
@@ -59,7 +70,8 @@ items:
           - '*'
         enchantments:
           SHARPNESS: 1
-        display_name: '&c取消踢人的权限'
+        display_name: '&c撤销 · 移出成员权限'
+        lores: ['', '&7该成员当前拥有此权限', '', '&c▶ 点击撤销']
   per_set_member_damage:
     give:
       priority: -2
@@ -67,7 +79,8 @@ items:
         material: GOLDEN_SWORD
         flags:
           - '*'
-        display_name: '&c给予开关成员PVP的权限'
+        display_name: '&a授予 · 管理成员 PVP'
+        lores: ['', '&7允许该成员切换城邦成员 PVP', '', '&a▶ 点击授予']
     take:
       priority: -2
       icon:
@@ -76,12 +89,14 @@ items:
           - '*'
         enchantments:
           SHARPNESS: 1
-        display_name: '&c取消开关成员PVP的权限'
+        display_name: '&c撤销 · 管理成员 PVP'
+        lores: ['', '&7该成员当前拥有此权限', '', '&c▶ 点击撤销']
   per_player_join_check:
     give:
       priority: -3
       icon:
-        display_name: '&c给予入会审批的权限'
+        display_name: '&a授予 · 入会审批权限'
+        lores: ['', '&7允许该成员处理入会申请', '', '&a▶ 点击授予']
         material: TOTEM_OF_UNDYING
         flags:
           - '*'
@@ -93,15 +108,19 @@ items:
           - '*'
         enchantments:
           SHARPNESS: 1
-        display_name: '&c取消入会审批的权限'
+        display_name: '&c撤销 · 入会审批权限'
+        lores: ['', '&7该成员当前拥有此权限', '', '&c▶ 点击撤销']
   per_use_shop:
     give:
       priority: -4
       icon:
         material: WHEAT
-        display_name: '&c给予使用城邦商店的权限'
+        display_name: '&a授予 · 使用城邦商店'
         lores:
-          - ' &c这将允许 {member_name} 消费城邦币'
+          - ''
+          - '&7允许 &f{member_name} &7消费城邦币'
+          - ''
+          - '&a▶ 点击授予'
     take:
       priority: -4
       icon:
@@ -110,15 +129,19 @@ items:
           - '*'
         enchantments:
           SHARPNESS: 1
-        display_name: '&c取消使用城邦商店的权限'
+        display_name: '&c撤销 · 使用城邦商店'
+        lores: ['', '&7该成员当前拥有此权限', '', '&c▶ 点击撤销']
   per_use_icon_repository:
     give:
       priority: -5
       icon:
         material: ITEM_FRAME
-        display_name: '&c给予使用图标仓库的权限'
+        display_name: '&a授予 · 管理城邦图标'
         lores:
-          - ' &f这将允许 {member_name} 设置城邦图标'
+          - ''
+          - '&7允许 &f{member_name} &7设置城邦图标'
+          - ''
+          - '&a▶ 点击授予'
     take:
       priority: -5
       icon:
@@ -127,15 +150,19 @@ items:
           - '*'
         enchantments:
           SHARPNESS: 1
-        display_name: '&c取消使用图标商店的权限'
+        display_name: '&c撤销 · 管理城邦图标'
+        lores: ['', '&7该成员当前拥有此权限', '', '&c▶ 点击撤销']
   per_set_announcements:
     give:
       priority: -6
       icon:
         material: MAP
-        display_name: '&c给予设置公告的权限'
+        display_name: '&a授予 · 编辑城邦公告'
         lores:
-          - ' &f这将允许 {member_name} 设置公告'
+          - ''
+          - '&7允许 &f{member_name} &7编辑城邦公告'
+          - ''
+          - '&a▶ 点击授予'
     take:
       priority: -6
       icon:
@@ -144,4 +171,5 @@ items:
           - '*'
         enchantments:
           SHARPNESS: 1
-        display_name: '&c取消设置公告的权限'
+        display_name: '&c撤销 · 编辑城邦公告'
+        lores: ['', '&7该成员当前拥有此权限', '', '&c▶ 点击撤销']

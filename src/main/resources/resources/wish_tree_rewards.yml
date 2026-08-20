@@ -1,0 +1,123 @@
+settings:
+  pity: {rare: 30, epic: 80}
+  early_chance: {rare: 0.025, epic: 0.005}
+
+rewards:
+  iron_bundle:
+    display_name: '&f铁锭礼包'
+    pool: BASE
+    quality: COMMON
+    weight: 45
+    minimum_tree_level: 1
+    actions:
+      item: {type: ITEM, material: IRON_INGOT, amount: 8}
+  gold_bundle:
+    display_name: '&6金锭礼包'
+    pool: BASE
+    quality: COMMON
+    weight: 30
+    minimum_tree_level: 1
+    actions:
+      item: {type: ITEM, material: GOLD_INGOT, amount: 4}
+  experience_bundle:
+    display_name: '&a经验瓶礼包'
+    pool: BASE
+    quality: COMMON
+    weight: 20
+    minimum_tree_level: 1
+    actions:
+      item: {type: ITEM, material: EXPERIENCE_BOTTLE, amount: 8}
+  money_100:
+    display_name: '&e100金币'
+    pool: BASE
+    quality: COMMON
+    weight: 5
+    minimum_tree_level: 1
+    actions:
+      money: {type: VAULT_MONEY, amount: 100}
+  diamond_target:
+    display_name: '&b4颗钻石'
+    pool: TARGET
+    quality: RARE
+    targetable: true
+    minimum_tree_level: 1
+    actions:
+      item: {type: ITEM, material: DIAMOND, amount: 4}
+  emerald_target:
+    display_name: '&a16颗绿宝石'
+    pool: TARGET
+    quality: RARE
+    targetable: true
+    minimum_tree_level: 2
+    actions:
+      item: {type: ITEM, material: EMERALD, amount: 16}
+  stones_5:
+    display_name: '&d5颗魔力石'
+    pool: TARGET
+    quality: RARE
+    targetable: true
+    minimum_tree_level: 3
+    actions:
+      stones: {type: MAGIC_STONE, amount: 5}
+  netherite_target:
+    display_name: '&5下界合金锭'
+    pool: TARGET
+    quality: EPIC
+    targetable: true
+    minimum_tree_level: 3
+    actions:
+      item: {type: ITEM, material: NETHERITE_INGOT, amount: 1}
+  apple_target:
+    display_name: '&d附魔金苹果'
+    pool: TARGET
+    quality: EPIC
+    targetable: true
+    minimum_tree_level: 4
+    actions:
+      item: {type: ITEM, material: ENCHANTED_GOLDEN_APPLE, amount: 1}
+  money_2000:
+    display_name: '&e2000金币'
+    pool: TARGET
+    quality: EPIC
+    targetable: true
+    minimum_tree_level: 5
+    actions:
+      money: {type: VAULT_MONEY, amount: 2000}
+  weekly_stone_1:
+    display_name: '&d1颗魔力石'
+    pool: TARGET
+    quality: COMMON
+    targetable: false
+    minimum_tree_level: 1
+    actions:
+      stones: {type: MAGIC_STONE, amount: 1}
+  weekly_stone_2:
+    display_name: '&d2颗魔力石'
+    pool: TARGET
+    quality: COMMON
+    targetable: false
+    minimum_tree_level: 1
+    actions:
+      stones: {type: MAGIC_STONE, amount: 2}
+  weekly_stone_3:
+    display_name: '&d3颗魔力石'
+    pool: TARGET
+    quality: COMMON
+    targetable: false
+    minimum_tree_level: 1
+    actions:
+      stones: {type: MAGIC_STONE, amount: 3}
+  weekly_stone_5:
+    display_name: '&d5颗魔力石'
+    pool: TARGET
+    quality: COMMON
+    targetable: false
+    minimum_tree_level: 1
+    actions:
+      stones: {type: MAGIC_STONE, amount: 5}
+
+weekly_rewards:
+  '25': {rewards: [weekly_stone_1], city_gmoney: 100}
+  '50': {rewards: [weekly_stone_2], city_gmoney: 250}
+  '75': {rewards: [weekly_stone_3], city_gmoney: 500}
+  '100': {rewards: [weekly_stone_5], city_gmoney: 1000}

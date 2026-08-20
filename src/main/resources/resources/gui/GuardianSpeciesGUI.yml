@@ -1,0 +1,21 @@
+row: 3
+title: '&8✦ &6&l选择守护兽'
+other_items:
+  frame:
+    indexes: '1-9,10,18-27'
+    icon: {material: ORANGE_STAINED_GLASS_PANE, display_name: ''}
+items:
+  back: {index: 22, icon: {material: ARROW, display_name: '&c&l← 返回', lores: ['&7返回守护兽界面']}}
+  species_1: {index: 11, icon: {material: BLAZE_POWDER, display_name: '&c&l赤焰龙', lores: ['', '&7炽热、勇猛的火焰主题外观', '&8所有种类成长数值完全相同', '', '&c▶ 点击选择']}}
+  species_2: {index: 13, icon: {material: OAK_SAPLING, display_name: '&a&l森灵龙', lores: ['', '&7自然、灵动的森林主题外观', '&8所有种类成长数值完全相同', '', '&a▶ 点击选择']}}
+  species_3: {index: 15, icon: {material: BLUE_ICE, display_name: '&b&l霜晶龙', lores: ['', '&7冷冽、纯净的冰霜主题外观', '&8所有种类成长数值完全相同', '', '&b▶ 点击选择']}}
+confirm:
+  row: 3
+  title: '&8✦ &c&l确认永久选择'
+  other_items:
+    frame:
+      indexes: '1-9,10,18-27'
+      icon: {material: RED_STAINED_GLASS_PANE, display_name: ''}
+  items:
+    cancel: {index: 11, icon: {material: RED_WOOL, display_name: '&c&l✖ 取消', lores: ['', '&7返回种类选择']}}
+    confirm: {index: 15, icon: {material: LIME_WOOL, display_name: '&a&l✔ 永久选择 {species}', lores: ['', '&c⚠ 该选择无法由玩家撤销', '', '&a▶ 点击最终确认']}}

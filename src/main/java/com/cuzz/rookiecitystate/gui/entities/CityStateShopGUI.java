@@ -369,6 +369,10 @@ public class CityStateShopGUI extends BasePlayerGUI {
      * @param guiBuilder
      */
     private void setSetCityStateSpawnReward(@NotNull ConfigurationSection shopItemSection, @NotNull IndexConfigGUI.Builder guiBuilder) {
+        throw new IllegalStateException("独立城邦世界使用模板固定出生点，设置主城商品已停用");
+        /* Legacy implementation intentionally remains unreachable so old configurations are parsed
+           and rendered as a disabled barrier instead of charging players. */
+        /*
         ConfigurationSection sellSection = shopItemSection.getConfigurationSection("sell");
         double price = sellSection.getDouble("price");
 
@@ -390,6 +394,7 @@ public class CityStateShopGUI extends BasePlayerGUI {
             }
         });
         PluginLogger.debug(DebugMessage.END_GUI_LOAD_ITEM, shopItemSection.getCurrentPath());
+        */
     }
 
     /**

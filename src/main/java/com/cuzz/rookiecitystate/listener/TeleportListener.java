@@ -26,7 +26,7 @@ public final class TeleportListener implements Listener {
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
-        service.cancel(event.getPlayer(), false);
+        service.cancel(event.getPlayer(), true);
     }
 
     public void notifyCancelled(Player player) {

@@ -106,6 +106,14 @@ public class MainGUI extends BasePageableGUI {
         PluginLogger.debug(DebugMessage.BEGIN_GUI_LOAD_ITEM, "items.page_items");
         guiBuilder.pageItems(thisGUISection.getConfigurationSection("items.page_items"), this);
 
+        if (thisGUISection.contains("items.popular_city_states")) {
+            guiBuilder.item(GUIItemManager.getIndexItem(thisGUISection.getConfigurationSection("items.popular_city_states"),
+                    bukkitPlayer), event -> {
+                close();
+                new PopularCityStateGUI(MainGUI.this, cityStatePlayer).open();
+            });
+        }
+
 
         if (cityStatePlayer.isInCityState()) {
 			PluginLogger.debug(DebugMessage.BEGIN_GUI_LOAD_ITEM, "items.my_city_state");

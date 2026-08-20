@@ -1,7 +1,6 @@
 package com.cuzz.rookiecitystate.citystate;
 
 import com.cuzz.rookiecitystate.RookieCityState;
-import com.cuzz.rookiecitystate.api.event.CityStateDeletedEvent;
 import com.cuzz.rookiecitystate.config.setting.MainSettings;
 import com.cuzz.rookiecitystate.citystate.member.CityStateMember;
 import com.cuzz.rookiecitystate.citystate.member.CityStateOwner;
@@ -15,7 +14,9 @@ import com.cuzz.rookiecitystate.request.Sender;
 import com.cuzz.rookiecitystate.util.Util;
 import com.cuzz.rookiecitystate.internal.io.YamlFiles;
 import com.cuzz.rookiecitystate.logger.PluginLogger;
-import org.bukkit.Bukkit;
+import com.cuzz.rookiecitystate.world.CityLifecycleState;
+import com.cuzz.rookiecitystate.world.CityWorldState;
+import com.cuzz.rookiecitystate.world.WorldVisibility;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -27,6 +28,8 @@ import parsii.tokenizer.ParseException;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -49,6 +52,12 @@ public class CityState implements Sender, Receiver {
     private CityStateSpawn spawn;
     private boolean memberDamageEnabled;
     private boolean valid = true;
+    private CityLifecycleState lifecycleState;
+    private CityWorldState worldState;
+    private WorldVisibility worldVisibility;
+    private String worldName;
+    private String worldLastError;
+    private int worldBorderSize;
 
     public CityState(File file) {
         this.file = file;
@@ -66,14 +75,28 @@ public class CityState implements Sender, Receiver {
      */
     private void load() {
         this.yaml = YamlFiles.load(file, StandardCharsets.UTF_8);
-        this.deleted = yaml.getBoolean("deleted");
+        migrateSchemaIfRequired();
+        this.name = Objects.requireNonNull(yaml.getString("name"), "城邦缺少 name");
+        this.uuid = UUID.fromString(Objects.requireNonNull(yaml.getString("uuid"), "城邦缺少 uuid"));
+        this.lifecycleState = parseEnum(CityLifecycleState.class, yaml.getString("lifecycle.state"),
+                yaml.getBoolean("deleted") ? CityLifecycleState.DELETED : CityLifecycleState.ACTIVE);
+        this.worldState = parseEnum(CityWorldState.class, yaml.getString("world.status"),
+                lifecycleState == CityLifecycleState.DELETED ? CityWorldState.ARCHIVED : CityWorldState.UNASSIGNED);
+        this.worldVisibility = parseEnum(WorldVisibility.class, yaml.getString("world.visibility"), WorldVisibility.PRIVATE);
+        this.worldName = yaml.getString("world.name", managedWorldName(uuid));
+        this.worldLastError = yaml.getString("world.last_error");
+        this.worldBorderSize = yaml.getInt("world.border.size", MainSettings.getCityStateWorldBorderSize());
+        if (!"MYWORLDS".equalsIgnoreCase(yaml.getString("world.backend", "MYWORLDS"))) {
+            throw new IllegalArgumentException("不支持的城邦世界后端");
+        }
+        if (!managedWorldName(uuid).equals(worldName)) throw new IllegalArgumentException("城邦世界名不符合固定 UUID 规则");
+        if (worldBorderSize < 16) throw new IllegalArgumentException("城邦世界边界数据无效");
+        this.deleted = lifecycleState == CityLifecycleState.DELETED || yaml.getBoolean("deleted");
 
         if (isDeleted()) {
             return;
         }
 
-        this.name = yaml.getString("name");
-        this.uuid = UUID.fromString(yaml.getString("uuid"));
         this.cityStateBank = new CityStateBank(this);
 
         if (!yaml.contains("message_box")) {
@@ -96,12 +119,59 @@ public class CityState implements Sender, Receiver {
         this.currentIcon = Optional.ofNullable(yaml.getString("current_icon")).map(s -> iconMap.get(UUID.fromString(s))).orElse(null);
     }
 
+    private void migrateSchemaIfRequired() {
+        int version = yaml.getInt("schema_version", 1);
+        if (version > 2) throw new IllegalArgumentException("不支持的城邦数据版本: " + version);
+        if (version == 2) return;
+        String uuidText = Objects.requireNonNull(yaml.getString("uuid"), "旧城邦缺少 uuid");
+        UUID legacyUuid = UUID.fromString(uuidText);
+        File backup = new File(file.getParentFile(), file.getName() + ".bak.v1");
+        try {
+            if (!backup.exists()) Files.copy(file.toPath(), backup.toPath(), StandardCopyOption.COPY_ATTRIBUTES);
+        } catch (Exception exception) {
+            throw new IllegalStateException("无法备份旧城邦数据: " + file.getName(), exception);
+        }
+        boolean legacyDeleted = yaml.getBoolean("deleted");
+        yaml.set("schema_version", 2);
+        yaml.set("lifecycle.state", legacyDeleted ? CityLifecycleState.DELETED.name() : CityLifecycleState.ACTIVE.name());
+        yaml.set("lifecycle.updated_at", System.currentTimeMillis());
+        yaml.set("world.backend", "MYWORLDS");
+        yaml.set("world.name", managedWorldName(legacyUuid));
+        yaml.set("world.status", legacyDeleted ? CityWorldState.ARCHIVED.name() : CityWorldState.UNASSIGNED.name());
+        yaml.set("world.template.id", MainSettings.getCityStateWorldTemplate());
+        yaml.set("world.template.revision", MainSettings.getCityStateWorldTemplateRevision());
+        yaml.set("world.border.size", MainSettings.getCityStateWorldBorderSize());
+        yaml.set("world.visibility", MainSettings.getCityStateWorldDefaultVisibility());
+        if (yaml.contains("spawn")) {
+            yaml.set("migration.legacy_spawn", yaml.getConfigurationSection("spawn").getValues(true));
+        }
+        YamlFiles.save(yaml, file, StandardCharsets.UTF_8);
+    }
+
+    private static <T extends Enum<T>> T parseEnum(Class<T> type, String value, T fallback) {
+        if (value == null) return fallback;
+        try { return Enum.valueOf(type, value.toUpperCase(Locale.ROOT)); }
+        catch (IllegalArgumentException exception) {
+            throw new IllegalArgumentException("无效的 " + type.getSimpleName() + ": " + value, exception);
+        }
+    }
+
+    public static String managedWorldName(UUID cityStateId) {
+        return "rcs_city_" + cityStateId.toString().replace("-", "");
+    }
+
     public CityStateSpawn getSpawn() {
         return spawn;
     }
 
     public void setSpawn(@NotNull Location location) {
+        if (worldState != CityWorldState.PROVISIONING) {
+            throw new IllegalStateException("独立世界出生点由模板固定，只有世界初始化阶段可以写入");
+        }
         if (location.getWorld() == null) throw new IllegalArgumentException("主城世界不可用");
+        if (!location.getWorld().getName().equals(worldName)) {
+            throw new IllegalArgumentException("独立世界模式下出生点只能位于本城邦受管世界");
+        }
         ConfigurationSection oldSpawn = yaml.getConfigurationSection("spawn");
         Map<String, Object> previous = oldSpawn == null ? null : new LinkedHashMap<>(oldSpawn.getValues(false));
         if (!yaml.contains("spawn")) {
@@ -263,6 +333,43 @@ public class CityState implements Sender, Receiver {
         return deleted;
     }
 
+    public CityLifecycleState getLifecycleState() { return lifecycleState; }
+    public CityWorldState getWorldState() { return worldState; }
+    public WorldVisibility getWorldVisibility() { return worldVisibility; }
+    public String getWorldName() { return worldName; }
+    public String getWorldLastError() { return worldLastError; }
+    public int getWorldBorderSize() { return worldBorderSize; }
+    public boolean isWorldReady() { return worldState == CityWorldState.READY; }
+
+    public synchronized void setWorldVisibility(@NotNull WorldVisibility visibility) {
+        WorldVisibility previous = this.worldVisibility;
+        yaml.set("world.visibility", visibility.name());
+        try { save(); } catch (RuntimeException exception) {
+            yaml.set("world.visibility", previous.name());
+            throw exception;
+        }
+        this.worldVisibility = visibility;
+        if (plugin.getCitySocialService() != null) {
+            plugin.getCitySocialService().onVisibilityChanged(this);
+        }
+    }
+
+    public synchronized void transitionWorld(@NotNull CityLifecycleState lifecycle,
+                                             @NotNull CityWorldState worldState,
+                                             @Nullable String lastError) {
+        yaml.set("schema_version", 2);
+        yaml.set("lifecycle.state", lifecycle.name());
+        yaml.set("lifecycle.updated_at", System.currentTimeMillis());
+        yaml.set("world.status", worldState.name());
+        yaml.set("world.last_error", lastError);
+        yaml.set("deleted", lifecycle == CityLifecycleState.DELETED);
+        save();
+        this.lifecycleState = lifecycle;
+        this.worldState = worldState;
+        this.worldLastError = lastError;
+        this.deleted = lifecycle == CityLifecycleState.DELETED;
+    }
+
     /**
      * 得到城邦银行
      * @return
@@ -302,6 +409,7 @@ public class CityState implements Sender, Receiver {
         memberMap.put(newOwnerUuid, replacementOwner);
         memberMap.put(oldOwner.getUuid(), replacementMember);
         owner = replacementOwner;
+        plugin.getCityWorldService().synchronizeProtection(this);
     }
 
     /**
@@ -416,6 +524,10 @@ public class CityState implements Sender, Receiver {
             throw exception;
         }
         memberMap.put(uuid, new CityStateMember(this, cityStatePlayer));
+        if (plugin.getCitySocialService() != null) {
+            plugin.getCitySocialService().onMembershipChanged(uuid);
+        }
+        plugin.getCityWorldService().synchronizeProtection(this);
         cleanRequests(cityStatePlayer.getSentRequests().stream()
                 .filter(request -> request instanceof com.cuzz.rookiecitystate.request.entities.JoinRequest)
                 .toList());
@@ -447,6 +559,8 @@ public class CityState implements Sender, Receiver {
         }
         memberMap.remove(cityStateMember.getUuid());
         plugin.getCityStateManager().unregisterMember(this, cityStateMember.getUuid());
+        plugin.getWishTreeService().memberLeft(this, cityStateMember.getUuid());
+        plugin.getCityWorldService().handleMembershipRemoved(this, cityStateMember.getUuid());
         cleanRequests(cityStateMember.getReceivedRequests());
         cleanRequests(cityStateMember.getSentRequests());
     }
@@ -456,7 +570,8 @@ public class CityState implements Sender, Receiver {
     }
 
     public boolean isValid() {
-        return valid && !deleted && plugin.getCityStateManager().isValid(this);
+        return valid && !deleted && lifecycleState == CityLifecycleState.ACTIVE
+                && plugin.getCityStateManager().isValid(this);
     }
 
     /**
@@ -464,15 +579,11 @@ public class CityState implements Sender, Receiver {
      * @return
      */
     public void delete() {
-        yaml.set("deleted", true);
-        YamlFiles.save(yaml, file, StandardCharsets.UTF_8);
-        this.deleted = true;
-        getMembers().forEach(cityStateMember ->
-                cityStateMember.getReceivedRequests().stream().toList().forEach(Request::delete));
-        getSentRequests().stream().toList().forEach(Request::delete);
-        getReceivedRequests().stream().toList().forEach(Request::delete);
-        plugin.getCityStateManager().unloadCityState(this);
-        Bukkit.getPluginManager().callEvent(new CityStateDeletedEvent(this));
+        deleteAsync();
+    }
+
+    public java.util.concurrent.CompletionStage<com.cuzz.rookiecitystate.world.DeletionResult> deleteAsync() {
+        return plugin.getCityStateLifecycleService().delete(this);
     }
 
     public int getMaxMemberCount() {

@@ -1,0 +1,212 @@
+schema_version: 1
+
+rotation:
+  timezone: Asia/Shanghai
+  reset_hour: 4
+  size: 6
+  retention_weeks: 12
+
+particle:
+  interval_ticks: 10
+  count: 2
+  max_emitters_per_run: 128
+  radius: 0.45
+  height: 1.0
+  speed: 0.01
+
+action:
+  max_distance: 8.0
+  cooldown_seconds: 15
+
+products:
+  particle_flame:
+    kind: PARTICLE
+    display_name: '&6炽焰环流'
+    icon: BLAZE_POWDER
+    price: 600
+    weight: 10
+    weekly_limit: 1
+    particle: FLAME
+  particle_leaf:
+    kind: PARTICLE
+    display_name: '&a森灵新芽'
+    icon: OAK_SAPLING
+    price: 600
+    weight: 10
+    weekly_limit: 1
+    particle: COMPOSTER
+  particle_snow:
+    kind: PARTICLE
+    display_name: '&b霜雪星屑'
+    icon: SNOWBALL
+    price: 600
+    weight: 10
+    weekly_limit: 1
+    particle: SNOWFLAKE
+  particle_amethyst:
+    kind: PARTICLE
+    display_name: '&d晶紫回响'
+    icon: AMETHYST_SHARD
+    price: 750
+    weight: 6
+    weekly_limit: 1
+    particle: WITCH
+
+  title_friend:
+    kind: TITLE
+    display_name: '&6称号：灵兽之友'
+    icon: NAME_TAG
+    price: 550
+    weight: 10
+    weekly_limit: 1
+    text: '&6灵兽之友'
+  title_keeper:
+    kind: TITLE
+    display_name: '&a称号：爱心饲育员'
+    icon: NAME_TAG
+    price: 650
+    weight: 8
+    weekly_limit: 1
+    text: '&a爱心饲育员'
+  title_resonance:
+    kind: TITLE
+    display_name: '&d称号：灵兽共鸣者'
+    icon: NAME_TAG
+    price: 800
+    weight: 6
+    weekly_limit: 1
+    text: '&d灵兽共鸣者'
+
+  prefix_feeder:
+    kind: CHAT_PREFIX
+    display_name: '&e前缀：[饲育员]'
+    icon: OAK_SIGN
+    price: 650
+    weight: 10
+    weekly_limit: 1
+    text: '&7[&e饲育员&7]'
+  prefix_beastmaster:
+    kind: CHAT_PREFIX
+    display_name: '&b前缀：[灵兽使]'
+    icon: OAK_SIGN
+    price: 800
+    weight: 7
+    weekly_limit: 1
+    text: '&7[&b灵兽使&7]'
+  prefix_guardian:
+    kind: CHAT_PREFIX
+    display_name: '&6前缀：[守护者]'
+    icon: OAK_SIGN
+    price: 1000
+    weight: 4
+    weekly_limit: 1
+    text: '&7[&6守护者&7]'
+
+  action_walk:
+    kind: ACTION
+    display_name: '&a互动：亲昵漫步'
+    icon: LEAD
+    price: 500
+    weight: 10
+    weekly_limit: 1
+    animations:
+      egg:
+        '0': {name: interact, duration_ticks: 30, speed: 1.0, force: true}
+      baby:
+        '0': {name: walk, duration_ticks: 40, speed: 1.0, force: true}
+      adult:
+        '0': {name: walk, duration_ticks: 40, speed: 1.0, force: true}
+  action_fly:
+    kind: ACTION
+    display_name: '&b互动：飞行巡游'
+    icon: FEATHER
+    price: 750
+    weight: 7
+    weekly_limit: 1
+    minimum_guardian_level: 1
+    animations:
+      baby:
+        '0': {name: fly_start, duration_ticks: 20, speed: 1.0, force: true}
+        '1': {name: fly_loop, duration_ticks: 40, speed: 1.0, force: true}
+        '2': {name: fly_end, duration_ticks: 20, speed: 1.0, force: true}
+      adult:
+        '0': {name: fly_start, duration_ticks: 20, speed: 1.0, force: true}
+        '1': {name: fly_loop, duration_ticks: 40, speed: 1.0, force: true}
+        '2': {name: fly_end, duration_ticks: 20, speed: 1.0, force: true}
+  action_spell:
+    kind: ACTION
+    display_name: '&d互动：灵能绽放'
+    icon: ENCHANTED_BOOK
+    price: 900
+    weight: 4
+    weekly_limit: 1
+    minimum_guardian_level: 3
+    animations:
+      adult:
+        '0': {name: spell_ground, duration_ticks: 60, speed: 1.0, force: true}
+
+  decor_lantern:
+    kind: ITEM
+    display_name: '&e灯笼 ×8'
+    icon: LANTERN
+    price: 60
+    weight: 14
+    weekly_limit: 2
+    reward: {material: LANTERN, amount: 8}
+  decor_sea_lantern:
+    kind: ITEM
+    display_name: '&b海晶灯 ×8'
+    icon: SEA_LANTERN
+    price: 90
+    weight: 12
+    weekly_limit: 2
+    reward: {material: SEA_LANTERN, amount: 8}
+  decor_amethyst:
+    kind: ITEM
+    display_name: '&d紫水晶簇 ×4'
+    icon: AMETHYST_CLUSTER
+    price: 100
+    weight: 10
+    weekly_limit: 2
+    reward: {material: AMETHYST_CLUSTER, amount: 4}
+  decor_cherry_leaves:
+    kind: ITEM
+    display_name: '&d樱花树叶 ×16'
+    icon: CHERRY_LEAVES
+    price: 80
+    weight: 12
+    weekly_limit: 2
+    reward: {material: CHERRY_LEAVES, amount: 16}
+  decor_end_rod:
+    kind: ITEM
+    display_name: '&f末地烛 ×8'
+    icon: END_ROD
+    price: 120
+    weight: 8
+    weekly_limit: 1
+    reward: {material: END_ROD, amount: 8}
+  decor_flower_pot:
+    kind: ITEM
+    display_name: '&6花盆 ×8'
+    icon: FLOWER_POT
+    price: 60
+    weight: 14
+    weekly_limit: 2
+    reward: {material: FLOWER_POT, amount: 8}
+
+  stone_one:
+    kind: MAGIC_STONE
+    display_name: '&d魔力石 ×1'
+    icon: AMETHYST_SHARD
+    price: 40
+    weight: 15
+    weekly_limit: 2
+    reward: {amount: 1}
+  stone_three:
+    kind: MAGIC_STONE
+    display_name: '&d魔力石 ×3'
+    icon: AMETHYST_CLUSTER
+    price: 110
+    weight: 8
+    weekly_limit: 1
+    reward: {amount: 3}

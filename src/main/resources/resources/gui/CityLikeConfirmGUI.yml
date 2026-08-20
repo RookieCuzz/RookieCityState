@@ -1,0 +1,20 @@
+row: 3
+title: '&8✦ &d&l确认点赞'
+other_items:
+  frame:
+    indexes: '1-9,10,18-27'
+    icon: {material: PURPLE_STAINED_GLASS_PANE, display_name: ''}
+items:
+  info:
+    index: 14
+    icon:
+      material: NETHER_STAR
+      display_name: '&d&l为 {city_state_name} 点赞'
+      lores:
+        - ''
+        - '&8▪ &7当前历史总赞：&f{social_total_likes}'
+        - '&8▪ &7本周剩余票数：&f{social_votes_remaining}'
+        - ''
+        - '&8点赞仅用于表达认可，不发放资产奖励'
+  confirm: {index: 12, icon: {material: LIME_DYE, display_name: '&a&l✔ 确认点赞', lores: ['', '&a点击送出本周点赞票']}}
+  cancel: {index: 16, icon: {material: RED_DYE, display_name: '&c&l✖ 取消', lores: ['', '&7返回城邦详情']}}

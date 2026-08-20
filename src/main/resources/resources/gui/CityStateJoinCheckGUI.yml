@@ -1,59 +1,67 @@
-title: '&e&l入会审批({page}/{total_page})' # move marker
+title: '&8✦ &a&l入会审批 &8· &f{page}/{total_page}' # move marker
 row: 6
+other_items:
+  frame:
+    indexes: '1-9,10,18-19,27-28,36-37,45-54'
+    icon: {material: GREEN_STAINED_GLASS_PANE, display_name: ''}
 items:
   request:
     indexes: '11-17,20-26,29-35'
     icon:
       use_papi: true
       material: PAPER
-      display_name: '{sender_name}'
+      display_name: '&a&l{sender_name}'
       lores:
-        - ' &f申请时间: {send_time}'
-        - ' &f拥有金币: %vault_eco_balance%'
-        - ' &a左键接受 &c右键拒绝'
+        - ''
+        - '&8▪ &7申请时间：&f{send_time}'
+        - '&8▪ &7玩家金币：&6%vault_eco_balance%'
+        - ''
+        - '&a左键：接受申请'
+        - '&c右键：拒绝申请'
   back:
     index: 50
     icon:
       material: ARROW
-      display_name: '&f返回'
+      display_name: '&c&l← 返回'
+      lores: ['&7返回我的城邦']
   page_items:
     precious_page:
       have:
         index: 46
         icon:
           material: BOOK
-          display_name: '&f上一页'
+          display_name: '&e&l← 上一页'
           enchantments:
             SHARPNESS: 1
           flags:
             - 'HIDE_ATTRIBUTES'
             - 'HIDE_ENCHANTS'
           lores:
-            - ' &f点击切换'
+            - '&7查看上一页申请'
       not_have:
         index: 46
         icon:
           material: BOOK
-          display_name: '&f上一页'
+          display_name: '&8← 上一页'
           lores:
-            - ' &7没有上一页了'
+            - '&8已经是第一页'
     next_page:
       have:
         index: 54
         icon:
           material: BOOK
-          display_name: '&f下一页'
+          display_name: '&e&l下一页 →'
           enchantments:
             SHARPNESS: 1
           flags:
             - 'HIDE_ATTRIBUTES'
             - 'HIDE_ENCHANTS'
           lores:
-            - ' &f点击切换'
+            - '&7查看下一页申请'
       not_have:
         index: 54
         icon:
           material: BOOK
-          display_name: '&f下一页'
+          display_name: '&8下一页 →'
           lores:
-            - ' &7没有下一页了'
+            - '&8已经是最后一页'

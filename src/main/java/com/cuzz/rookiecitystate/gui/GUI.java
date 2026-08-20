@@ -10,6 +10,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Optional;
+import org.bukkit.Bukkit;
 
 /**
  * 采用被动式，容错式更新设计，每次点击如果遇到无效的情况则强制更新，否则继续使用
@@ -28,6 +29,16 @@ public interface GUI {
         CONFIRM,
         SHOP_CONFIRM,
         ICON_REPOSITORY,
+        WISH_TREE,
+        WISH_TARGET,
+        WISH_INBOX,
+        GUARDIAN_BEAST,
+        GUARDIAN_SPECIES,
+        GUARDIAN_SHOP,
+        GUARDIAN_SHOP_CONFIRM,
+        GUARDIAN_LOCKER,
+        POPULAR_CITY_STATE,
+        CITY_LIKE_CONFIRM,
         BAG,
         WAR
     }
@@ -48,6 +59,15 @@ public interface GUI {
 
     default Player getBukkitPlayer() {
         return getCityStatePlayer().getBukkitPlayer();
+    }
+
+    default Player currentOnlinePlayer() {
+        Player player = Bukkit.getPlayer(getCityStatePlayer().getUuid());
+        return player != null && player.isOnline() ? player : null;
+    }
+
+    default boolean isCurrentInstance() {
+        return getCityStatePlayer().getUsingGUI() == this;
     }
 
     default void openLater(long tick) {

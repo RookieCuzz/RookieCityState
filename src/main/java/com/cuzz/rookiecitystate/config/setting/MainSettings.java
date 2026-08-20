@@ -8,6 +8,73 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainSettings {
+    @NotNull
+    @Config(path = "city_state.world.template")
+    private static String cityStateWorldTemplate;
+
+    @Min(1)
+    @Config(path = "city_state.world.template_revision")
+    private static int cityStateWorldTemplateRevision;
+
+    @NotNull
+    @Config(path = "city_state.world.core_region")
+    private static String cityStateWorldCoreRegion;
+
+    @Config(path = "city_state.world.bundled_template.enabled")
+    private static boolean cityStateWorldBundledTemplateEnabled;
+    @Config(path = "city_state.world.core_bounds.min.x") private static int cityStateWorldCoreMinX;
+    @Config(path = "city_state.world.core_bounds.min.y") private static int cityStateWorldCoreMinY;
+    @Config(path = "city_state.world.core_bounds.min.z") private static int cityStateWorldCoreMinZ;
+    @Config(path = "city_state.world.core_bounds.max.x") private static int cityStateWorldCoreMaxX;
+    @Config(path = "city_state.world.core_bounds.max.y") private static int cityStateWorldCoreMaxY;
+    @Config(path = "city_state.world.core_bounds.max.z") private static int cityStateWorldCoreMaxZ;
+
+    @Min(16)
+    @Config(path = "city_state.world.border_size")
+    private static int cityStateWorldBorderSize;
+
+    @Min(0)
+    @Config(path = "city_state.world.unload_delay_seconds")
+    private static int cityStateWorldUnloadDelaySeconds;
+
+    @Min(1)
+    @Config(path = "city_state.world.archive_retention_days")
+    private static int cityStateWorldArchiveRetentionDays;
+
+    @NotNull
+    @Config(path = "city_state.world.fallback_world")
+    private static String cityStateWorldFallbackWorld;
+
+    @NotNull
+    @Config(path = "city_state.world.default_visibility")
+    private static String cityStateWorldDefaultVisibility;
+
+    @NotNull @Config(path = "city_state.wish_tree.timezone")
+    private static String wishTreeTimezone;
+    @Min(0) @Config(path = "city_state.wish_tree.reset_hour")
+    private static int wishTreeResetHour;
+    @NotNull @Config(path = "city_state.wish_tree.schematics.main.file")
+    private static String wishTreeMainSchematic;
+    @Config(path = "city_state.wish_tree.schematics.main.enabled")
+    private static boolean wishTreeMainSchematicEnabled;
+    @Config(path = "city_state.wish_tree.schematics.main.origin.x") private static int wishTreeMainOriginX;
+    @Config(path = "city_state.wish_tree.schematics.main.origin.y") private static int wishTreeMainOriginY;
+    @Config(path = "city_state.wish_tree.schematics.main.origin.z") private static int wishTreeMainOriginZ;
+    @Config(path = "city_state.wish_tree.schematics.main.spawn.x") private static double wishTreeSpawnX;
+    @Config(path = "city_state.wish_tree.schematics.main.spawn.y") private static double wishTreeSpawnY;
+    @Config(path = "city_state.wish_tree.schematics.main.spawn.z") private static double wishTreeSpawnZ;
+    @Config(path = "city_state.wish_tree.schematics.main.spawn.yaw") private static double wishTreeSpawnYaw;
+    @Config(path = "city_state.wish_tree.schematics.main.spawn.pitch") private static double wishTreeSpawnPitch;
+    @NotNull @Config(path = "city_state.wish_tree.schematics.tree.file_pattern")
+    private static String wishTreeSchematicPattern;
+    @Config(path = "city_state.wish_tree.schematics.tree.origin.x") private static int wishTreeOriginX;
+    @Config(path = "city_state.wish_tree.schematics.tree.origin.y") private static int wishTreeOriginY;
+    @Config(path = "city_state.wish_tree.schematics.tree.origin.z") private static int wishTreeOriginZ;
+    @Config(path = "city_state.wish_tree.interaction.x") private static double wishTreeInteractionX;
+    @Config(path = "city_state.wish_tree.interaction.y") private static double wishTreeInteractionY;
+    @Config(path = "city_state.wish_tree.interaction.z") private static double wishTreeInteractionZ;
+    @NotNull @Config(path = "city_state.wish_tree.region_id") private static String wishTreeRegionId;
+
     @Min(0)
     @Config(path = "city_state.sign.reward.gmoney")
     private static double cityStateSignRewardGMoney;
@@ -149,6 +216,42 @@ public class MainSettings {
     public static String getCityStateEssChatNotStr() {
         return cityStateEssChatNotStr;
     }
+
+    public static String getCityStateWorldTemplate() { return cityStateWorldTemplate; }
+    public static int getCityStateWorldTemplateRevision() { return cityStateWorldTemplateRevision; }
+    public static String getCityStateWorldCoreRegion() { return cityStateWorldCoreRegion; }
+    public static boolean isCityStateWorldBundledTemplateEnabled() { return cityStateWorldBundledTemplateEnabled; }
+    public static int getCityStateWorldCoreMinX() { return cityStateWorldCoreMinX; }
+    public static int getCityStateWorldCoreMinY() { return cityStateWorldCoreMinY; }
+    public static int getCityStateWorldCoreMinZ() { return cityStateWorldCoreMinZ; }
+    public static int getCityStateWorldCoreMaxX() { return cityStateWorldCoreMaxX; }
+    public static int getCityStateWorldCoreMaxY() { return cityStateWorldCoreMaxY; }
+    public static int getCityStateWorldCoreMaxZ() { return cityStateWorldCoreMaxZ; }
+    public static int getCityStateWorldBorderSize() { return cityStateWorldBorderSize; }
+    public static int getCityStateWorldUnloadDelaySeconds() { return cityStateWorldUnloadDelaySeconds; }
+    public static int getCityStateWorldArchiveRetentionDays() { return cityStateWorldArchiveRetentionDays; }
+    public static String getCityStateWorldFallbackWorld() { return cityStateWorldFallbackWorld; }
+    public static String getCityStateWorldDefaultVisibility() { return cityStateWorldDefaultVisibility; }
+    public static String getWishTreeTimezone() { return wishTreeTimezone; }
+    public static int getWishTreeResetHour() { return wishTreeResetHour; }
+    public static String getWishTreeMainSchematic() { return wishTreeMainSchematic; }
+    public static boolean isWishTreeMainSchematicEnabled() { return wishTreeMainSchematicEnabled; }
+    public static int getWishTreeMainOriginX() { return wishTreeMainOriginX; }
+    public static int getWishTreeMainOriginY() { return wishTreeMainOriginY; }
+    public static int getWishTreeMainOriginZ() { return wishTreeMainOriginZ; }
+    public static double getWishTreeSpawnX() { return wishTreeSpawnX; }
+    public static double getWishTreeSpawnY() { return wishTreeSpawnY; }
+    public static double getWishTreeSpawnZ() { return wishTreeSpawnZ; }
+    public static float getWishTreeSpawnYaw() { return (float) wishTreeSpawnYaw; }
+    public static float getWishTreeSpawnPitch() { return (float) wishTreeSpawnPitch; }
+    public static String getWishTreeSchematicPattern() { return wishTreeSchematicPattern; }
+    public static int getWishTreeOriginX() { return wishTreeOriginX; }
+    public static int getWishTreeOriginY() { return wishTreeOriginY; }
+    public static int getWishTreeOriginZ() { return wishTreeOriginZ; }
+    public static double getWishTreeInteractionX() { return wishTreeInteractionX; }
+    public static double getWishTreeInteractionY() { return wishTreeInteractionY; }
+    public static double getWishTreeInteractionZ() { return wishTreeInteractionZ; }
+    public static String getWishTreeRegionId() { return wishTreeRegionId; }
 
     public static String getCityStateAnnouncementInputCancelStr() {
         return cityStateAnnouncementInputCancelStr;

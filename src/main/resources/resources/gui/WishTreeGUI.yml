@@ -1,0 +1,68 @@
+row: 6
+title: '&8✦ &d&l城邦许愿树'
+other_items:
+  frame:
+    indexes: '1-9,10,18-19,27-28,36-37,45-54'
+    icon: {material: PURPLE_STAINED_GLASS_PANE, display_name: ''}
+items:
+  back: {index: 50, icon: {material: ARROW, display_name: '&c&l← 返回', lores: ['&7返回我的城邦']}}
+  info:
+    index: 5
+    icon:
+      material: OAK_SAPLING
+      display_name: '&d&l许愿树 &fLv.{level}'
+      lores:
+        - ''
+        - '&8▪ &7当前经验：&f{experience}'
+        - '&8▪ &7本周成长：&a{growth}&8/&f{target}'
+        - '&8▪ &7持有魔力石：&d{stones}'
+        - ''
+        - '&7成员签到、浇水会帮助许愿树成长'
+  target:
+    index: 20
+    icon:
+      material: NETHER_STAR
+      display_name: '&e&l我的心愿目标'
+      lores:
+        - ''
+        - '&8▪ &7当前目标：&f{wish_target}'
+        - '&8▪ &7稀有保底：&b{rare_pity}&8/&f{rare_limit}'
+        - '&8▪ &7史诗保底：&d{epic_pity}&8/&f{epic_limit}'
+        - ''
+        - '&e▶ 点击选择心愿'
+  wish:
+    index: 22
+    icon:
+      material: AMETHYST_SHARD
+      display_name: '&d&l向许愿树祈愿'
+      lores:
+        - ''
+        - '&8▪ &7免费次数：&a{free}'
+        - '&8▪ &7额外次数：&d{paid}'
+        - ''
+        - '&d▶ 点击进行一次祈愿'
+  water:
+    index: 24
+    icon:
+      material: WATER_BUCKET
+      display_name: '&b&l为许愿树浇水'
+      lores:
+        - ''
+        - '&7每名成员每天可以浇水一次'
+        - '&7浇水将增加本周成长进度'
+        - ''
+        - '&b▶ 点击浇水'
+  inbox:
+    index: 32
+    icon:
+      material: CHEST
+      display_name: '&6&l心愿奖励箱'
+      lores:
+        - ''
+        - '&8▪ &7等待领取：&e{mailbox} 份'
+        - ''
+        - '&6▶ 点击查看奖励'
+  milestone_25: {index: 38, icon: {material: LIME_DYE, display_name: '&a&l成长里程碑 · 25%', lores: ['', '&7达到本周 25% 成长后可领取', '', '&e▶ 点击尝试领取']}}
+  milestone_50: {index: 40, icon: {material: LIME_DYE, display_name: '&a&l成长里程碑 · 50%', lores: ['', '&7达到本周 50% 成长后可领取', '', '&e▶ 点击尝试领取']}}
+  milestone_75: {index: 42, icon: {material: LIME_DYE, display_name: '&a&l成长里程碑 · 75%', lores: ['', '&7达到本周 75% 成长后可领取', '', '&e▶ 点击尝试领取']}}
+  milestone_100: {index: 44, icon: {material: NETHER_STAR, display_name: '&d&l成长里程碑 · 100%', lores: ['', '&7完成本周全部成长后可领取', '', '&d▶ 点击尝试领取']}}

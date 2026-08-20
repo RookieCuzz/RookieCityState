@@ -1,0 +1,11 @@
+row: 6
+title: '&8✦ &d&l选择心愿 &8· &f{page}/{total_page}'
+indexes: '10-16,19-25,28-34,37-43'
+other_items:
+  frame:
+    indexes: '1-9,10,18-19,27-28,36-37,45-54'
+    icon: {material: PURPLE_STAINED_GLASS_PANE, display_name: ''}
+items:
+  back: {index: 50, icon: {material: ARROW, display_name: '&c&l← 返回', lores: ['&7返回许愿树']}}
+  previous: {index: 46, icon: {material: ARROW, display_name: '&e&l← 上一页', lores: ['&7查看上一页心愿']}}
+  next: {index: 54, icon: {material: ARROW, display_name: '&e&l下一页 →', lores: ['&7查看下一页心愿']}}

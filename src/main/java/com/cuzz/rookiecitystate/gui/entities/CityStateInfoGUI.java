@@ -23,6 +23,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.stream.Collectors;
+import com.cuzz.rookiecitystate.world.CityWorldState;
+import com.cuzz.rookiecitystate.world.WorldVisibility;
+import com.cuzz.rookiecitystate.social.CitySocialView;
 
 
 /**
@@ -91,6 +94,42 @@ public class CityStateInfoGUI extends BasePlayerGUI {
                     }
                 });
         PluginLogger.debug(DebugMessage.END_GUI_LOAD_ITEM, "items.request_join");
+
+        if (cityState.getWorldVisibility() == WorldVisibility.PUBLIC
+                && cityState.getWorldState() == CityWorldState.READY && thisGUISection.contains("items.visit")) {
+            guiBuilder.item(GUIItemManager.getIndexItem(thisGUISection.getConfigurationSection("items.visit"), bukkitPlayer,
+                    new PlaceholderContainer().addCityStatePlaceholders(cityState)), event -> {
+                close();
+                plugin.getCityWorldService().enter(bukkitPlayer, cityState).thenAccept(result ->
+                        org.bukkit.Bukkit.getScheduler().runTask(plugin, () -> Util.sendMsg(bukkitPlayer,
+                                result.success() ? "&a已进入城邦参观。" : "&c无法参观: " + result.reason())));
+            });
+        }
+
+        if (thisGUISection.contains("items.social_like")) {
+            CitySocialView social = plugin.getCitySocialService().getView(bukkitPlayer, cityState);
+            String state;
+            if (social.status() == CitySocialView.Status.ERROR) state = "error";
+            else if (cityState.getMember(bukkitPlayer.getUniqueId()) != null) state = "member";
+            else if (cityState.getWorldVisibility() != WorldVisibility.PUBLIC
+                    || cityState.getWorldState() != CityWorldState.READY) state = "unavailable";
+            else if (social.likedThisWeek()) state = "liked";
+            else if (social.votesRemaining() <= 0) state = "no_votes";
+            else if (social.qualified()) state = "qualified";
+            else state = "locked";
+            PlaceholderContainer socialValues = new PlaceholderContainer().addCityStatePlaceholders(cityState)
+                    .add("social_total_likes", social.totalLikes())
+                    .add("social_7d_visitors", social.recentVisitors())
+                    .add("social_7d_likes", social.recentLikes())
+                    .add("social_hot_score", social.hotScore())
+                    .add("social_hot_rank", social.hotRank())
+                    .add("social_qualification_seconds", plugin.getCitySocialService().getConfig().qualificationSeconds())
+                    .add("social_votes_remaining", social.votesRemaining());
+            guiBuilder.item(GUIItemManager.getIndexItem(thisGUISection.getConfigurationSection("items.social_like." + state),
+                    bukkitPlayer, socialValues), state.equals("qualified") ? event -> {
+                close(); new CityLikeConfirmGUI(CityStateInfoGUI.this, cityStatePlayer, cityState).open();
+            } : null);
+        }
 
         PluginLogger.debug(DebugMessage.BEGIN_GUI_LOAD_ITEM, "items.members");
         guiBuilder.item(GUIItemManager.getIndexItem(thisGUISection.getConfigurationSection("items.members"), bukkitPlayer, new PlaceholderContainer().addCityStatePlaceholders(cityState)), new ItemListener() {

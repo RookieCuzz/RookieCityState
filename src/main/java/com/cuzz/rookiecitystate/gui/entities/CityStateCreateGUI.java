@@ -21,6 +21,7 @@ import com.cuzz.rookiecitystate.internal.text.MessageService;
 import com.cuzz.rookiecitystate.internal.text.Title;
 import com.cuzz.rookiecitystate.internal.text.LegacyText;
 import com.cuzz.rookiecitystate.transaction.TransactionService;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -98,13 +99,10 @@ public class CityStateCreateGUI extends BasePlayerGUI {
                             @Override
                             public void onConfirm() {
                                 close();
-                                TransactionService.Result result = plugin.getTransactionService().execute(
-                                        "创建城邦(金币): " + cityStateName,
-                                        () -> validateCreation(cityStatePlayer, cityStateName),
+                                beginCreation(cityStatePlayer, cityStateName,
                                         plugin.getTransactionService().vault(vaultEconomy, bukkitPlayer,
                                                 MainSettings.getCityStateCreatePriceMoneyAmount()),
-                                        () -> createCityState(cityStatePlayer, cityStateName));
-                                if (!result.success()) Util.sendMsg(bukkitPlayer, "&c创建失败: " + result.reason());
+                                        "VAULT", MainSettings.getCityStateCreatePriceMoneyAmount());
                             }
 
                             @Override
@@ -142,13 +140,10 @@ public class CityStateCreateGUI extends BasePlayerGUI {
                             @Override
                             public void onConfirm() {
                                 close();
-                                TransactionService.Result result = plugin.getTransactionService().execute(
-                                        "创建城邦(点券): " + cityStateName,
-                                        () -> validateCreation(cityStatePlayer, cityStateName),
+                                beginCreation(cityStatePlayer, cityStateName,
                                         plugin.getTransactionService().points(playerPointsEconomy, bukkitPlayer,
                                                 MainSettings.getCityStateCreatePricePointsAmount()),
-                                        () -> createCityState(cityStatePlayer, cityStateName));
-                                if (!result.success()) Util.sendMsg(bukkitPlayer, "&c创建失败: " + result.reason());
+                                        "PLAYER_POINTS", MainSettings.getCityStateCreatePricePointsAmount());
                             }
 
                             @Override
@@ -174,13 +169,33 @@ public class CityStateCreateGUI extends BasePlayerGUI {
         return guiBuilder.build();
     }
 
-    private void createCityState(CityStatePlayer cityStatePlayer, String cityStateName) {
+    private void beginCreation(CityStatePlayer cityStatePlayer, String cityStateName,
+                               TransactionService.Payment payment, String paymentType, double amount) {
+        try {
+            validateCreation(cityStatePlayer, cityStateName);
+        } catch (RuntimeException error) {
+            Util.sendMsg(bukkitPlayer, "&c创建失败: " + error.getMessage());
+            return;
+        }
+        Util.sendMsg(bukkitPlayer, "&e城邦世界正在建设，完成前不会扣款，请勿重复提交。");
+        plugin.getCityStateLifecycleService().create(cityStatePlayer, cityStateName, payment, paymentType, amount)
+                .whenComplete((result, error) -> Bukkit.getScheduler().runTask(plugin, () -> {
+                    if (error != null) {
+                        Util.sendMsg(bukkitPlayer, "&c创建失败: " + error.getMessage());
+                    } else if (!result.success()) {
+                        Util.sendMsg(bukkitPlayer, "&c创建失败: " + result.reason());
+                    } else {
+                        showCreationSuccess(cityStatePlayer, cityStateName);
+                    }
+                }));
+    }
+
+    private void showCreationSuccess(CityStatePlayer cityStatePlayer, String cityStateName) {
         Player bukkitPlayer = cityStatePlayer.getBukkitPlayer();
         PlaceholderContainer placeholderContainer = new PlaceholderContainer()
                 .add("player", bukkitPlayer.getName())
                 .add("city_state_name", cityStateName);
 
-        cityStateManager.createCityState(cityStatePlayer, cityStateName);
         MessageService.broadcastColoredMessage(PlaceholderText.replacePlaceholders(thisLangSection.getString("success.broadcast"), placeholderContainer));
 
         if (MessageService.isTitleEnabled()) {

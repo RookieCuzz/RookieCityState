@@ -40,6 +40,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import com.cuzz.rookiecitystate.world.WorldVisibility;
 
 public class CityStateMineGUI extends BasePlayerGUI {
     private final RookieCityState plugin = RookieCityState.inst();
@@ -112,18 +113,33 @@ public class CityStateMineGUI extends BasePlayerGUI {
                 });
         PluginLogger.debug(DebugMessage.END_GUI_LOAD_ITEM, "items.city_state_donate");
 
-        // 城邦主城
+        // 独立城邦世界
         {
-            String path = "items.city_state_spawn." + (cityState.hasSpawn() ? "available" : "unavailable");
+            String path = "items.city_state_spawn." + (cityState.getWorldState() == com.cuzz.rookiecitystate.world.CityWorldState.ERROR
+                    ? "unavailable" : "available");
 
             PluginLogger.debug(DebugMessage.BEGIN_GUI_LOAD_ITEM, path);
-            guiBuilder.item(GUIItemManager.getPriorityItem(thisGUISection.getConfigurationSection(path), bukkitPlayer), cityState.hasSpawn() ? new ItemListener() {
+            guiBuilder.item(GUIItemManager.getPriorityItem(thisGUISection.getConfigurationSection(path), bukkitPlayer),
+                    cityState.getWorldState() == com.cuzz.rookiecitystate.world.CityWorldState.ERROR ? null : new ItemListener() {
                         @Override
                         public void onClick(InventoryClickEvent event) {
                             executeCityStateSpawn();
                         }
-                    } : null);
+                    });
             PluginLogger.debug(DebugMessage.END_GUI_LOAD_ITEM, path);
+        }
+
+        if (cityState.isOwner(cityStateMember) && thisGUISection.contains("items.city_state_visibility")) {
+            String path = "items.city_state_visibility." + cityState.getWorldVisibility().name().toLowerCase(java.util.Locale.ROOT);
+            guiBuilder.item(GUIItemManager.getPriorityItem(thisGUISection.getConfigurationSection(path), bukkitPlayer),
+                    event -> {
+                        WorldVisibility next = cityState.getWorldVisibility() == WorldVisibility.PUBLIC
+                                ? WorldVisibility.PRIVATE : WorldVisibility.PUBLIC;
+                        plugin.getCityWorldService().setVisibility(cityState, next);
+                        Util.sendMsg(bukkitPlayer, next == WorldVisibility.PUBLIC
+                                ? "&a城邦现已开放参观。" : "&e城邦现已设为私有，访客已被迁出。");
+                        reopen();
+                    });
         }
 
         List<String> originalAnnouncements = cityState.getAnnouncements().stream().map(s -> "§f" + s).collect(Collectors.toList());
@@ -192,6 +208,24 @@ public class CityStateMineGUI extends BasePlayerGUI {
                 }
             });
             PluginLogger.debug(DebugMessage.END_GUI_LOAD_ITEM, "items.city_state_shop");
+        }
+
+        if (thisGUISection.contains("items.city_state_wish_tree")) {
+            PluginLogger.debug(DebugMessage.BEGIN_GUI_LOAD_ITEM, "items.city_state_wish_tree");
+            guiBuilder.item(GUIItemManager.getPriorityItem(
+                    thisGUISection.getConfigurationSection("items.city_state_wish_tree"), bukkitPlayer), event -> {
+                close();
+                new WishTreeGUI(CityStateMineGUI.this, cityStateMember).open();
+            });
+            PluginLogger.debug(DebugMessage.END_GUI_LOAD_ITEM, "items.city_state_wish_tree");
+        }
+
+        if (thisGUISection.contains("items.city_state_guardian")) {
+            guiBuilder.item(GUIItemManager.getPriorityItem(
+                    thisGUISection.getConfigurationSection("items.city_state_guardian"), bukkitPlayer), event -> {
+                close();
+                new GuardianBeastGUI(CityStateMineGUI.this, cityState, cityStateMember.getCityStatePlayer()).open();
+            });
         }
 
         // 成员免伤
@@ -304,6 +338,9 @@ public class CityStateMineGUI extends BasePlayerGUI {
         }
 
         cityStateMemberSign.signToday();
+        if (plugin.getWishTreeService().grantSignStone(cityStatePlayer)) {
+            Util.sendMsg(bukkitPlayer, "&d签到额外获得 1 颗魔力石。");
+        }
 
         double gmoney = MainSettings.getCityStateSignRewardGMoney();
 
@@ -340,13 +377,14 @@ public class CityStateMineGUI extends BasePlayerGUI {
                             new BukkitRunnable() {
                                 @Override
                                 public void run() {
-                                    if (cityState.isValid()) {
-                                        cityState.delete();
-                                    }
+                                    if (cityState.isValid()) cityState.deleteAsync().whenComplete((result, error) ->
+                                            Bukkit.getScheduler().runTask(plugin, () -> {
+                                                if (error != null) Util.sendMsg(bukkitPlayer, "&c解散失败: " + error.getMessage());
+                                                else if (result.success()) Util.sendMsg(bukkitPlayer, thisLangSection.getString("city_state_delete.success"));
+                                                else Util.sendMsg(bukkitPlayer, "&c解散失败: " + result.reason());
+                                            }));
                                 }
                             }.runTask(plugin);
-
-                            Util.sendMsg(bukkitPlayer, thisLangSection.getString("city_state_delete.success"));
                         } else {
                             Util.sendMsg(bukkitPlayer, thisLangSection.getString("city_state_delete.failed"));
                         }
@@ -362,8 +400,8 @@ public class CityStateMineGUI extends BasePlayerGUI {
     private void executeCityStateLeave() {
         close();
         Util.sendMsg(bukkitPlayer, thisLangSection.getString("city_state_leave.confirm"), new PlaceholderContainer()
-                .add("wait", MainSettings.getCityStateDismissWait())
-                .add("confirm_str", MainSettings.getCityStateDismissConfirmStr()));
+                .add("wait", MainSettings.getCityStateExitWait())
+                .add("confirm_str", MainSettings.getCityStateExitConfirmStr()));
         new ChatInterceptor.Builder()
                 .player(bukkitPlayer)
                 .plugin(plugin)
@@ -388,29 +426,14 @@ public class CityStateMineGUI extends BasePlayerGUI {
     }
 
     private void executeCityStateSpawn() {
-        if (!cityState.hasSpawn() || cityState.getSpawn().getLocation() == null) {
-            Util.sendMsg(bukkitPlayer, "&c城邦主城所在世界不可用。");
-            reopen();
-            return;
-        }
-
         close();
-        plugin.getTeleportService().begin(
-                bukkitPlayer,
-                cityState.getSpawn().getLocation(),
-                MainSettings.getCityStateSpawnTeleportWait(),
-                remaining -> bukkitPlayer.sendTitle(
-                        LegacyText.getColoredText(PlaceholderText.replacePlaceholders(thisLangSection.getString("city_state_spawn.count_down.title"),
-                                new PlaceholderContainer().add("count_down", remaining))),
-                        LegacyText.getColoredText(PlaceholderText.replacePlaceholders(thisLangSection.getString("city_state_spawn.count_down.subtitle"),
-                                new PlaceholderContainer().add("count_down", remaining))), 0, 20, 20),
-                () -> bukkitPlayer.sendTitle(
-                        LegacyText.getColoredText(thisLangSection.getString("city_state_spawn.teleported.title")),
-                        LegacyText.getColoredText(thisLangSection.getString("city_state_spawn.teleported.subtitle")), 0, 20, 20),
-                () -> bukkitPlayer.sendTitle(
-                        LegacyText.getColoredText(thisLangSection.getString("city_state_spawn.cancelled.title")),
-                        LegacyText.getColoredText(thisLangSection.getString("city_state_spawn.cancelled.subtitle")), 0, 20, 20),
-                failure -> Util.sendMsg(bukkitPlayer, "&c传送失败: " + failure.getMessage()));
+        if (bukkitPlayer.getWorld().getName().equals(cityState.getWorldName())) {
+            plugin.getCityWorldService().exit(bukkitPlayer).thenAccept(result -> Bukkit.getScheduler().runTask(plugin,
+                    () -> Util.sendMsg(bukkitPlayer, result.success() ? "&a已离开城邦世界。" : "&c离开失败: " + result.reason())));
+        } else {
+            plugin.getCityWorldService().enter(bukkitPlayer, cityState).thenAccept(result -> Bukkit.getScheduler().runTask(plugin,
+                    () -> Util.sendMsg(bukkitPlayer, result.success() ? "&a已进入城邦世界。" : "&c进入失败: " + result.reason())));
+        }
     }
 
     @Override

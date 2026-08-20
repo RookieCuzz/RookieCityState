@@ -1,13 +1,11 @@
 package com.cuzz.rookiecitystate.citystate;
 
 import com.cuzz.rookiecitystate.RookieCityState;
-import com.cuzz.rookiecitystate.api.event.CityStateCreatedEvent;
 import com.cuzz.rookiecitystate.citystate.member.CityStateMember;
 import com.cuzz.rookiecitystate.citystate.member.CityStatePosition;
 import com.cuzz.rookiecitystate.internal.io.YamlFiles;
 import com.cuzz.rookiecitystate.logger.PluginLogger;
 import com.cuzz.rookiecitystate.player.CityStatePlayer;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
@@ -24,6 +22,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
+import java.util.Arrays;
+import com.cuzz.rookiecitystate.config.setting.MainSettings;
+import com.cuzz.rookiecitystate.world.CityLifecycleState;
+import com.cuzz.rookiecitystate.world.CityWorldState;
 
 public final class CityStateManager {
     private final RookieCityState plugin = RookieCityState.inst();
@@ -42,10 +44,21 @@ public final class CityStateManager {
         File file = new File(plugin.getDataFolder(), "data" + File.separator + "city_states" + File.separator + uuid + ".yml");
         YamlConfiguration yaml = new YamlConfiguration();
         long now = System.currentTimeMillis();
+        yaml.set("schema_version", 2);
         yaml.set("uuid", uuid.toString());
         yaml.set("name", cityStateName);
         yaml.set("creation_time", now);
         yaml.set("member_damage_enabled", true);
+        yaml.set("deleted", false);
+        yaml.set("lifecycle.state", CityLifecycleState.ACTIVE.name());
+        yaml.set("lifecycle.updated_at", now);
+        yaml.set("world.backend", "MYWORLDS");
+        yaml.set("world.name", CityState.managedWorldName(uuid));
+        yaml.set("world.status", CityWorldState.UNASSIGNED.name());
+        yaml.set("world.template.id", MainSettings.getCityStateWorldTemplate());
+        yaml.set("world.template.revision", MainSettings.getCityStateWorldTemplateRevision());
+        yaml.set("world.border.size", MainSettings.getCityStateWorldBorderSize());
+        yaml.set("world.visibility", MainSettings.getCityStateWorldDefaultVisibility());
         yaml.set("members." + ownerPlayer.getUuid() + ".position", CityStatePosition.OWNER.name());
         yaml.set("members." + ownerPlayer.getUuid() + ".join_time", now);
         YamlFiles.save(yaml, file);
@@ -53,7 +66,6 @@ public final class CityStateManager {
         try {
             CityState cityState = new CityState(file);
             registerLoadedCityState(cityState);
-            Bukkit.getPluginManager().callEvent(new CityStateCreatedEvent(cityState, ownerPlayer));
         } catch (RuntimeException exception) {
             try {
                 Files.deleteIfExists(file.toPath());
@@ -64,9 +76,65 @@ public final class CityStateManager {
         }
     }
 
+    public synchronized CityState createProvisioningDraft(CityStatePlayer ownerPlayer,
+                                                           @NotNull String cityStateName,
+                                                           @NotNull UUID uuid,
+                                                           @NotNull UUID operationId) {
+        if (ownerPlayer == null || ownerPlayer.isInCityState()) {
+            throw new IllegalArgumentException("创建者已经加入城邦或不存在");
+        }
+        String normalized = normalizeName(cityStateName);
+        if (normalized.isEmpty() || names.containsKey(normalized)) throw new IllegalArgumentException("城邦名已存在或无效");
+        File file = cityStateFile(uuid);
+        if (file.exists()) throw new IllegalStateException("城邦草稿文件已经存在");
+        YamlConfiguration yaml = new YamlConfiguration();
+        long now = System.currentTimeMillis();
+        yaml.set("schema_version", 2);
+        yaml.set("uuid", uuid.toString());
+        yaml.set("name", cityStateName);
+        yaml.set("creation_time", now);
+        yaml.set("member_damage_enabled", true);
+        yaml.set("deleted", false);
+        yaml.set("lifecycle.state", CityLifecycleState.PROVISIONING.name());
+        yaml.set("lifecycle.operation_id", operationId.toString());
+        yaml.set("lifecycle.updated_at", now);
+        yaml.set("world.backend", "MYWORLDS");
+        yaml.set("world.name", CityState.managedWorldName(uuid));
+        yaml.set("world.status", CityWorldState.PROVISIONING.name());
+        yaml.set("world.operation_id", operationId.toString());
+        yaml.set("world.template.id", MainSettings.getCityStateWorldTemplate());
+        yaml.set("world.template.revision", MainSettings.getCityStateWorldTemplateRevision());
+        yaml.set("world.border.size", MainSettings.getCityStateWorldBorderSize());
+        yaml.set("world.visibility", MainSettings.getCityStateWorldDefaultVisibility());
+        yaml.set("members." + ownerPlayer.getUuid() + ".position", CityStatePosition.OWNER.name());
+        yaml.set("members." + ownerPlayer.getUuid() + ".join_time", now);
+        YamlFiles.save(yaml, file);
+        return new CityState(file);
+    }
+
+    public synchronized void registerProvisionedCityState(@NotNull CityState cityState) {
+        if (cityState.getLifecycleState() != CityLifecycleState.ACTIVE || !cityState.isWorldReady()) {
+            throw new IllegalStateException("只能注册已完成世界初始化的城邦");
+        }
+        registerLoadedCityState(cityState);
+    }
+
+    public File cityStateFile(UUID uuid) {
+        return new File(plugin.getDataFolder(), "data" + File.separator + "city_states" + File.separator + uuid + ".yml");
+    }
+
     public synchronized void loadCityState(@NotNull File file) {
         CityState cityState = new CityState(file);
+        String expectedFileName = cityState.getUuid() + ".yml";
+        if (!file.getName().equalsIgnoreCase(expectedFileName)) {
+            throw new IllegalArgumentException("文件名 UUID 与 YAML uuid 不一致");
+        }
         if (cityState.isDeleted()) return;
+        if (cityState.getLifecycleState() != CityLifecycleState.ACTIVE) {
+            PluginLogger.warning("城邦处于恢复状态，暂不注册: " + file.getName() + " ("
+                    + cityState.getLifecycleState() + ")");
+            return;
+        }
         registerLoadedCityState(cityState);
     }
 
@@ -91,11 +159,12 @@ public final class CityStateManager {
         File folder = new File(plugin.getDataFolder(), "data" + File.separator + "city_states");
         File[] files = folder.listFiles((dir, name) -> name.toLowerCase(Locale.ROOT).endsWith(".yml"));
         if (files == null) return;
+        Arrays.sort(files, Comparator.comparing(File::getName));
         for (File file : files) {
             try {
                 loadCityState(file);
             } catch (RuntimeException exception) {
-                PluginLogger.warning("跳过损坏的城邦文件 " + file.getName() + ": " + exception.getMessage());
+                quarantine(file, exception);
             }
         }
     }
@@ -154,5 +223,20 @@ public final class CityStateManager {
 
     private void updateCache() {
         if (plugin.getCacheCityStateManager() != null) plugin.getCacheCityStateManager().updateSortedCityStates();
+    }
+
+    private void quarantine(File file, RuntimeException failure) {
+        try {
+            File folder = new File(plugin.getDataFolder(), "data" + File.separator + "quarantine"
+                    + File.separator + "city_states");
+            Files.createDirectories(folder.toPath());
+            File target = new File(folder, System.currentTimeMillis() + "-" + file.getName());
+            Files.move(file.toPath(), target.toPath());
+            Files.writeString(new File(folder, target.getName() + ".reason.txt").toPath(),
+                    failure.getClass().getSimpleName() + ": " + failure.getMessage());
+            PluginLogger.warning("城邦文件已隔离 " + file.getName() + ": " + failure.getMessage());
+        } catch (IOException quarantineFailure) {
+            PluginLogger.warning("跳过损坏城邦且隔离失败 " + file.getName() + ": " + quarantineFailure.getMessage());
+        }
     }
 }

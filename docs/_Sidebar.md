@@ -1,3 +1,17 @@
 [插件交流群：786184610](shang.qq.com/wpa/qunwpa?idkey=2bce4c6ead357011b84765ef5b4b607cc809fa16aee132c5ce0a56b7a4e16293)
 
 [mcbbs 介绍帖](https://www.mcbbs.net/forum.php?mod=viewthread&tid=879187)
+
+- [首页](Home.md)
+- [安装](安装.md)
+- [独立城邦世界](CITY_WORLDS.md)
+- [默认配置与配套材质](DEFAULT_ASSETS.md)
+- [城邦许愿树](WISH_TREE.md)
+- [城邦公共灵兽](GUARDIAN_BEAST.md)
+- [灵兽贡献商店](GUARDIAN_SHOP.md)
+- [访客点赞与热门城邦](CITY_SOCIAL.md)
+- [配置](配置.md)
+- [命令](指令.md)
+- [权限](权限.md)
+- [PlaceholderAPI](PlaceholderAPI变量.md)
+- [常见问题](常见问题.md)

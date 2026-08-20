@@ -5,3 +5,6 @@ target
 proguard.conf
 proguard-dictionary.txt
 proguard
+/Chunker/
+/others/ModelEngine-*.jar
+/others/模型_解包检查/

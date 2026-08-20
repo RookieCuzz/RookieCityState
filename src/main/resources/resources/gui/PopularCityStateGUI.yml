@@ -1,0 +1,29 @@
+row: 6
+title: '&8✦ &d&l热门城邦 &8· &f{page}/{total_page}'
+other_items:
+  glass:
+    indexes: '1-9,10,18-19,27-28,36-37,45-54'
+    icon: {material: PURPLE_STAINED_GLASS_PANE, display_name: ''}
+items:
+  back: {index: 49, icon: {material: ARROW, display_name: '&c&l← 返回', lores: ['&7返回城邦大厅']}}
+  city:
+    indexes: '11-17,20-26,29-35'
+    icon:
+      material: STONE
+      display_name: '&d&lNo.{social_hot_rank} &f{city_state_name}'
+      lores:
+        - ''
+        - '&8▪ &7会长：&f{city_state_owner}'
+        - '&8▪ &7七日热度：&d{social_hot_score}'
+        - '&8▪ &7独立访客：&f{social_7d_visitors}'
+        - '&8▪ &7七日点赞：&d{social_7d_likes}'
+        - '&8▪ &7历史总赞：&f{social_total_likes}'
+        - ''
+        - '&e▶ 点击查看、参观或点赞'
+  page_items:
+    precious_page:
+      have: {index: 46, icon: {material: BOOK, display_name: '&e&l← 上一页', lores: ['&7查看上一页城邦']}}
+      not_have: {index: 46, icon: {material: PAPER, display_name: '&8← 上一页', lores: ['&8已经是第一页']}}
+    next_page:
+      have: {index: 54, icon: {material: BOOK, display_name: '&e&l下一页 →', lores: ['&7查看下一页城邦']}}
+      not_have: {index: 54, icon: {material: PAPER, display_name: '&8下一页 →', lores: ['&8已经是最后一页']}}

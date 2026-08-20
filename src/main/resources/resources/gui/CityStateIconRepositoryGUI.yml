@@ -1,18 +1,25 @@
 row: 6
-title: '&e&l图标仓库({page}/{total_page})'
+title: '&8✦ &e&l城邦图标仓库 &8· &f{page}/{total_page}'
+other_items:
+  frame:
+    indexes: '1-9,10,18-19,27-28,36-37,45-54'
+    icon: {material: YELLOW_STAINED_GLASS_PANE, display_name: ''}
 items:
   back:
     index: 50
     icon:
       material: ARROW
-      display_name: '&c返回'
+      display_name: '&c&l← 返回'
+      lores: ['&7返回我的城邦']
   city_state_icon:
     indexes: '11-17,20-26,29-35'
     not_using:
       icon:
         material: STONE # 该 material 会被强制设置为城邦图标
+        lores: ['', '&e▶ 点击设为城邦图标']
     using:
       icon:
         material: STONE # 该 material 会被强制设置为城邦图标
         lores:
-          - ' &f使用中'
+          - ''
+          - '&a✔ 当前正在使用'

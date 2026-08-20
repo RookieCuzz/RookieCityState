@@ -1,0 +1,13 @@
+row: 5
+title: '&8✦ &6&l守护兽贡献商店'
+slots: '11-13,20-22'
+other_items:
+  frame:
+    indexes: '1-9,10,14-19,23-45'
+    icon: {material: ORANGE_STAINED_GLASS_PANE, display_name: ''}
+items:
+  back: {index: 37, icon: {material: ARROW, display_name: '&c&l← 返回', lores: ['&7返回守护兽界面']}}
+  info:
+    index: 5
+    icon: {material: EMERALD, display_name: '&a&l本周轮换商品', lores: ['', '&8▪ &7可用贡献：&a{available}', '&8▪ &7累计贡献：&f{lifetime}', '&8▪ &7距离轮换：&e{remaining}', '', '&7每周刷新商品与个人限购次数']}
+  locker: {index: 41, icon: {material: CHEST, display_name: '&d&l我的装扮', lores: ['', '&7查看并装备已经永久拥有的商品', '', '&d▶ 点击打开装扮柜']}}

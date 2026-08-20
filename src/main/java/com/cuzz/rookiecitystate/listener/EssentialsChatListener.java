@@ -33,12 +33,13 @@ public final class EssentialsChatListener implements Listener {
             String replacement;
             if (key.equalsIgnoreCase("is_in_city_state")) {
                 replacement = String.valueOf(plugin.getPlaceholderSnapshotService().isInCityState(event.getPlayer().getUniqueId()));
-            } else if (!plugin.getPlaceholderSnapshotService().isInCityState(event.getPlayer().getUniqueId())) {
+            } else if (!plugin.getPlaceholderSnapshotService().isInCityState(event.getPlayer().getUniqueId())
+                    && !isPlayerScoped(key)) {
                 replacement = MainSettings.getCityStateEssChatNotStr();
             } else {
                 replacement = plugin.getPlaceholderSnapshotService().get(event.getPlayer().getUniqueId(), key);
             }
-            result.append(replacement == null ? token : replacement);
+            result.append(replacement == null ? token : replacement.replace("%", "%%"));
             i = end;
         }
         event.setFormat(result.toString());
@@ -46,5 +47,13 @@ public final class EssentialsChatListener implements Listener {
 
     private String placeholderPrefix(String token) {
         return token.startsWith("<rookiecitystate_") ? "<rookiecitystate_" : null;
+    }
+
+    private boolean isPlayerScoped(String key) {
+        return key.equalsIgnoreCase("guardian_contribution_available")
+                || key.equalsIgnoreCase("guardian_contribution_lifetime")
+                || key.equalsIgnoreCase("guardian_title")
+                || key.equalsIgnoreCase("guardian_chat_prefix")
+                || key.equalsIgnoreCase("social_week_votes_remaining");
     }
 }

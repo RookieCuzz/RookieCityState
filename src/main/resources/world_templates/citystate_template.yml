@@ -1,0 +1,13 @@
+schema_version: 1
+archive: citystate_template.zip
+sha256: C0A4B402A71DB61067A04E60291BC3DA22EB70E225C9E453FC2D9E93F55823CF
+source_format: JAVA_1_21_4
+source_level_name: hubcastle_to_1.21.9
+generator: VOID
+spawn: {x: 0, y: 101, z: 0}
+region_files: 4
+world_border_after_install: 512
+template_revision: 2
+notes:
+  - 主城建筑已经包含在世界中，不再粘贴占位主城结构。
+  - RookieRegions city_core 在首次安装时由插件创建。

@@ -2,6 +2,10 @@ package com.cuzz.rookiecitystate;
 
 import com.cuzz.rookiecitystate.api.event.CityStateCreatedEvent;
 import com.cuzz.rookiecitystate.api.event.CityStateDeletedEvent;
+import com.cuzz.rookiecitystate.api.event.WishCompletedEvent;
+import com.cuzz.rookiecitystate.api.event.WishTreeLevelChangedEvent;
+import com.cuzz.rookiecitystate.api.event.CityLikedEvent;
+import com.cuzz.rookiecitystate.api.event.CityVisitQualifiedEvent;
 import com.cuzz.rookiecitystate.citystate.CityState;
 import com.cuzz.rookiecitystate.citystate.CityStateManager;
 import com.cuzz.rookiecitystate.citystate.member.CityStateMember;
@@ -18,6 +22,7 @@ import com.cuzz.rookiecitystate.request.Request;
 import com.cuzz.rookiecitystate.request.entities.TpAllRequest;
 import com.cuzz.rookiecitystate.transaction.TransactionService;
 import com.cuzz.rookiecitystate.thirdparty.PlaceholderAPIExpansion;
+import com.cuzz.rookiecitystate.world.BundledCityTemplateInstaller;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Material;
@@ -59,6 +64,14 @@ class RookieCityStateIntegrationTest {
     void setUp() {
         server = MockBukkit.mock();
         PluginMock vault = MockBukkit.createMockPlugin("Vault");
+        MockBukkit.createMockPlugin("BKCommonLib");
+        MockBukkit.createMockPlugin("My_Worlds");
+        MockBukkit.createMockPlugin("FastAsyncWorldEdit");
+        MockBukkit.createMockPlugin("WorldGuard");
+        MockBukkit.createMockPlugin("RookieRegions");
+        for (String dependency : List.of("Vault", "BKCommonLib", "My_Worlds", "FastAsyncWorldEdit", "RookieRegions")) {
+            assertTrue(server.getPluginManager().isPluginEnabled(dependency), dependency);
+        }
         server.getServicesManager().register(Economy.class, economy(), vault, org.bukkit.plugin.ServicePriority.Normal);
         plugin = MockBukkit.load(RookieCityState.class);
         if (server.getWorld("world") == null) server.addSimpleWorld("world");
@@ -79,19 +92,46 @@ class RookieCityStateIntegrationTest {
     }
 
     @Test
+    void bundledTemplateInstallsOnceAndNeverOverwritesAnExistingCustomWorld() throws Exception {
+        Path root = plugin.getDataFolder().toPath().resolve("bundle-world-root");
+        Files.createDirectories(root);
+        assertTrue(BundledCityTemplateInstaller.installIfMissing(plugin, root, "citystate_template"));
+        Path installed = root.resolve("citystate_template");
+        assertTrue(Files.isRegularFile(installed.resolve("level.dat")));
+        assertTrue(Files.isRegularFile(installed.resolve(BundledCityTemplateInstaller.MARKER)));
+        assertTrue(BundledCityTemplateInstaller.installIfMissing(plugin, root, "citystate_template"));
+
+        Path custom = root.resolve("custom_template");
+        Files.createDirectories(custom);
+        Files.writeString(custom.resolve("keep.txt"), "administrator-owned");
+        assertFalse(BundledCityTemplateInstaller.installIfMissing(plugin, root, "custom_template"));
+        assertEquals("administrator-owned", Files.readString(custom.resolve("keep.txt")));
+    }
+
+    @Test
     void allBundledMaterialsAreValidAndShopChineseIsUtf8() throws Exception {
         for (String resource : List.of(
                 "resources/shop/Shop1.yml", "resources/shop/Shop2.yml",
                 "resources/gui/MainGUI.yml", "resources/gui/CityStateInfoGUI.yml",
                 "resources/gui/CityStateJoinCheckGUI.yml", "resources/gui/CityStateMemberManageGUI.yml",
-                "resources/gui/CityStateMemberListGUI.yml", "resources/gui/CityStateMineGUI.yml")) {
+                "resources/gui/CityStateMemberListGUI.yml", "resources/gui/CityStateMineGUI.yml",
+                "resources/gui/WishTreeGUI.yml", "resources/gui/WishTargetGUI.yml",
+                "resources/gui/WishRewardInboxGUI.yml", "resources/wish_tree_rewards.yml",
+                "resources/gui/GuardianBeastGUI.yml", "resources/gui/GuardianSpeciesGUI.yml",
+                "resources/gui/GuardianContributionShopGUI.yml",
+                "resources/gui/GuardianShopConfirmGUI.yml",
+                "resources/gui/GuardianCosmeticLockerGUI.yml",
+                "resources/gui/PopularCityStateGUI.yml", "resources/gui/CityLikeConfirmGUI.yml",
+                "resources/guardian_beast.yml", "resources/guardian_shop.yml", "resources/city_social.yml")) {
             YamlConfiguration yaml;
             try (InputStreamReader reader = new InputStreamReader(
                     getClass().getClassLoader().getResourceAsStream(resource), StandardCharsets.UTF_8)) {
                 yaml = YamlConfiguration.loadConfiguration(reader);
             }
             assertMaterials(yaml);
-            if (resource.contains("Shop")) assertTrue(yaml.saveToString().contains("城邦"));
+            if (resource.startsWith("resources/shop/")) {
+                assertTrue(yaml.saveToString().contains("城邦"));
+            }
         }
     }
 
@@ -111,6 +151,48 @@ class RookieCityStateIntegrationTest {
 
         settings.set("city_state.default_max_member_count", previousCapacity);
         YamlFiles.save(settings, settingsFile);
+        assertTrue(plugin.reloadPlugin());
+    }
+
+    @Test
+    void invalidGuardianReloadRetainsPreviousSnapshot() {
+        int previous = plugin.getGuardianBeastService().getConfig().maxFeeds();
+        File guardianFile = new File(plugin.getDataFolder(), "config/guardian_beast.yml");
+        YamlConfiguration guardian = YamlFiles.load(guardianFile);
+        guardian.set("daily.max_feeds", 0);
+        YamlFiles.save(guardian, guardianFile);
+        assertFalse(plugin.reloadPlugin());
+        assertEquals(previous, plugin.getGuardianBeastService().getConfig().maxFeeds());
+        guardian.set("daily.max_feeds", previous);
+        YamlFiles.save(guardian, guardianFile);
+        assertTrue(plugin.reloadPlugin());
+    }
+
+    @Test
+    void invalidGuardianShopReloadRetainsPreviousSnapshot() {
+        int previous = plugin.getGuardianContributionShopService().getConfig().rotationSize();
+        File shopFile = new File(plugin.getDataFolder(), "config/guardian_shop.yml");
+        YamlConfiguration shop = YamlFiles.load(shopFile);
+        shop.set("rotation.size", 999);
+        YamlFiles.save(shop, shopFile);
+        assertFalse(plugin.reloadPlugin());
+        assertEquals(previous, plugin.getGuardianContributionShopService().getConfig().rotationSize());
+        shop.set("rotation.size", previous);
+        YamlFiles.save(shop, shopFile);
+        assertTrue(plugin.reloadPlugin());
+    }
+
+    @Test
+    void invalidCitySocialReloadRetainsPreviousSnapshot() {
+        int previous = plugin.getCitySocialService().getConfig().weeklyLikeLimit();
+        File socialFile = new File(plugin.getDataFolder(), "config/city_social.yml");
+        YamlConfiguration social = YamlFiles.load(socialFile);
+        social.set("like.weekly_limit", 0);
+        YamlFiles.save(social, socialFile);
+        assertFalse(plugin.reloadPlugin());
+        assertEquals(previous, plugin.getCitySocialService().getConfig().weeklyLikeLimit());
+        social.set("like.weekly_limit", previous);
+        YamlFiles.save(social, socialFile);
         assertTrue(plugin.reloadPlugin());
     }
 
@@ -154,8 +236,9 @@ class RookieCityStateIntegrationTest {
         try (var paths = Files.walk(Path.of("src"))) {
             for (Path path : paths.filter(Files::isRegularFile).toList()) {
                 String relative = Path.of("src").relativize(path).toString().toLowerCase(java.util.Locale.ROOT);
-                String content = Files.readString(path, StandardCharsets.UTF_8).toLowerCase(java.util.Locale.ROOT);
                 assertFalse(relative.contains(removedName), relative);
+                if (!relative.matches(".*\\.(java|yml|yaml|md|xml|json|properties|txt)$")) continue;
+                String content = Files.readString(path, StandardCharsets.UTF_8).toLowerCase(java.util.Locale.ROOT);
                 assertFalse(content.contains(removedBrand), relative);
                 assertFalse(content.contains(removedName), relative);
             }
@@ -284,7 +367,7 @@ class RookieCityStateIntegrationTest {
     }
 
     @Test
-    void teleportReplacementAndStrictShiftCountingAreDeterministic() {
+    void teleportReplacementAndMovementToleranceAreDeterministic() {
         PlayerMock player = server.addPlayer();
         org.bukkit.Location destination = new org.bukkit.Location(server.getWorld("world"), 20, 70, 20);
         assertTrue(plugin.getTeleportService().begin(player, destination, 10, ignored -> { },
@@ -293,6 +376,8 @@ class RookieCityStateIntegrationTest {
         assertTrue(plugin.getTeleportService().begin(player, destination, 10, ignored -> { },
                 () -> { }, () -> { }, failure -> fail(failure.getMessage())));
         assertEquals(1, plugin.getTeleportService().getPendingCount());
+        plugin.getTeleportService().handleMove(player, player.getLocation(), player.getLocation().add(0.005D, 0, 0));
+        assertEquals(1, plugin.getTeleportService().getPendingCount(), "sub-centimeter jitter must not cancel teleport");
         plugin.getTeleportService().handleMove(player, player.getLocation(), player.getLocation().add(1, 0, 0));
         assertEquals(0, plugin.getTeleportService().getPendingCount());
 
@@ -331,6 +416,16 @@ class RookieCityStateIntegrationTest {
     void customEventsExposeStaticHandlerLists() {
         assertSame(CityStateCreatedEvent.getHandlerList(), new CityStateCreatedEvent(nullCityState(), nullPlayer()).getHandlers());
         assertSame(CityStateDeletedEvent.getHandlerList(), new CityStateDeletedEvent(nullCityState()).getHandlers());
+        assertSame(WishCompletedEvent.getHandlerList(),
+                new WishCompletedEvent(nullCityState(), nullPlayer(), null).getHandlers());
+        assertSame(WishTreeLevelChangedEvent.getHandlerList(),
+                new WishTreeLevelChangedEvent(nullCityState(), 1, 2).getHandlers());
+        assertSame(CityVisitQualifiedEvent.getHandlerList(),
+                new CityVisitQualifiedEvent(nullCityState(), nullPlayer()).getHandlers());
+        assertSame(CityLikedEvent.getHandlerList(),
+                new CityLikedEvent(nullCityState(), nullPlayer(), null).getHandlers());
+        assertSame(plugin.getWishTreeService(), com.cuzz.rookiecitystate.api.RookieCityStateAPI.getWishTreeService());
+        assertSame(plugin.getCitySocialService(), com.cuzz.rookiecitystate.api.RookieCityStateAPI.getCitySocialService());
     }
 
     private CityState nullCityState() {

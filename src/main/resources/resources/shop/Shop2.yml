@@ -1,38 +1,42 @@
 name: Shop2
-title: '&e&l城邦商店(2/2)'
+title: '&8✦ &6&l城邦商店 &8· &f2/2'
 row: 6
 other_items:
   glass:
-    indexes: '47-49,51-53'
+    indexes: '1-9,10,18-19,27-28,36-37,45-54'
     icon:
-      material: WHITE_STAINED_GLASS_PANE
+      material: BLACK_STAINED_GLASS_PANE
       display_name: ''
-      lores:
-        - '&cby July_ss'
 simple_confirm_gui: &simple_confirm_gui
   row: 3
-  title: '&c&l确认支付'
+  title: '&8✦ &c&l确认购买'
   items:
     confirm:
       index: 14
       icon:
         material: NETHER_STAR
-        display_name: '&a确认'
+        display_name: '&a&l✔ 确认购买'
         lores:
-          - ' &e支付城邦币: {price}'
+          - ''
+          - '&8▪ &7支付城邦币：&6{price}'
+          - ''
+          - '&a▶ 点击确认'
     cancel:
       index: 27
       icon:
         material: ARROW
-        display_name: '&c返回'
+        display_name: '&c&l← 取消并返回'
 items:
   '11':
     index: 11
     icon:
       material: GOLD_INGOT
-      display_name: ' &f购买金锭图标'
+      display_name: '&6&l金锭城邦图标'
       lores:
-        - ' &f花费城邦币: {price}'
+        - ''
+        - '&8▪ &7花费：&6{price} 城邦币'
+        - ''
+        - '&e▶ 点击购买图标'
     reward_type: CITY_STATE_ICON
     sell:
       price: 1000
@@ -45,9 +49,12 @@ items:
     index: 12
     icon:
       material: DIAMOND
-      display_name: ' &f购买钻石图标'
+      display_name: '&b&l钻石城邦图标'
       lores:
-        - ' &f花费城邦币: {price}'
+        - ''
+        - '&8▪ &7花费：&6{price} 城邦币'
+        - ''
+        - '&e▶ 点击购买图标'
     reward_type: CITY_STATE_ICON
     sell:
       price: 1000
@@ -60,9 +67,12 @@ items:
     index: 13
     icon:
       material: TNT
-      display_name: ' &f购买TNT图标'
+      display_name: '&c&lTNT 城邦图标'
       lores:
-        - ' &f花费城邦币: {price}'
+        - ''
+        - '&8▪ &7花费：&6{price} 城邦币'
+        - ''
+        - '&e▶ 点击购买图标'
     reward_type: CITY_STATE_ICON
     sell:
       price: 1000
@@ -75,9 +85,12 @@ items:
     index: 14
     icon:
       material: DRAGON_HEAD
-      display_name: ' &f购买龙头图标'
+      display_name: '&5&l龙首城邦图标'
       lores:
-        - ' &f花费城邦币: {price}'
+        - ''
+        - '&8▪ &7花费：&6{price} 城邦币'
+        - ''
+        - '&e▶ 点击购买图标'
     reward_type: CITY_STATE_ICON
     sell:
       price: 1000
@@ -90,20 +103,20 @@ items:
     index: 50
     icon:
       material: ARROW
-      display_name: '&c返回'
+      display_name: '&c&l← 返回'
     reward_type: BACK
   '46':
     index: 46
     icon:
       material: BOOK
-      display_name: '&f上一页'
+      display_name: '&e&l← 上一页'
     reward_type: CITY_STATE_SHOP
     shop: Shop1
   '54':
     index: 54
     icon:
       material: BOOK
-      display_name: '&f下一页'
+      display_name: '&8下一页 →'
       lores:
-        - ' &f无'
+        - '&8已经是最后一页'
     reward_type: NONE

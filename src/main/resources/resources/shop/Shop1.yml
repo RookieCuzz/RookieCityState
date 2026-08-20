@@ -1,61 +1,53 @@
 name: Shop1
-title: '&e&l城邦商店(1/2)'
+title: '&8✦ &6&l城邦商店 &8· &f1/2'
 row: 6
 other_items:
   glass:
-    indexes: '47-49,51-53'
+    indexes: '1-9,10,18-19,27-28,36-37,45-54'
     icon:
-      material: WHITE_STAINED_GLASS_PANE
+      material: BLACK_STAINED_GLASS_PANE
       display_name: ''
-      lores:
-        - '&cby July_ss'
 simple_confirm_gui: &simple_confirm_gui
   row: 3
-  title: '&c&l确认支付'
+  title: '&8✦ &c&l确认购买'
   items:
     confirm:
       index: 14
       icon:
         material: NETHER_STAR
-        display_name: '&a确认'
+        display_name: '&a&l✔ 确认购买'
         lores:
-          - ' &e支付城邦币: {price}'
+          - ''
+          - '&8▪ &7支付城邦币：&6{price}'
+          - ''
+          - '&a▶ 点击确认'
     cancel:
       index: 27
       icon:
         material: ARROW
-        display_name: '&c返回'
+        display_name: '&c&l← 取消并返回'
 items:
-  '1':
-    index: 11
-    icon:
-      material: GRASS_BLOCK
-      display_name: '&f设置城邦主城'
-      lores:
-        - ' &f花费城邦币: {price}'
-        - ' &f位置为你现在所在的位置'
-    reward_type: CITY_STATE_SET_SPAWN
-    sell:
-      price: 1000
-      success_message: '&f设置城邦主城成功, 花费城邦币: &ex{price}&f.'
-      ConfirmGUI: *simple_confirm_gui
   '2':
     unavailable:
       index: 12
       reward_type: CITY_STATE_UPGRADE
       icon:
         material: EXPERIENCE_BOTTLE
-        display_name: '&f城邦升级'
+        display_name: '&8&l城邦升级 · 已满级'
         lores:
-          - ' &c无法继续升级'
+          - ''
+          - '&8当前成员容量已经达到上限'
     available:
       index: 12
       icon:
         material: EXPERIENCE_BOTTLE
-        display_name: '&f城邦升级'
+        display_name: '&a&l提升成员容量'
         lores:
-          - ' &f花费城邦币: {price}'
-          - ' &f城邦人数: {old} -> {new}'
+          - ''
+          - '&8▪ &7花费：&6{price} 城邦币'
+          - '&8▪ &7成员容量：&f{old} &8→ &a{new}'
+          - ''
+          - '&a▶ 点击购买升级'
     reward_type: CITY_STATE_UPGRADE
     sell:
       price: 1000
@@ -65,9 +57,13 @@ items:
     index: 13
     icon:
       material: FEATHER
-      display_name: '&f全员集结令'
+      display_name: '&b&l全员集结令'
       lores:
-        - ' &f请求所有在线成员传送到你所在的位置'
+        - ''
+        - '&7邀请所有在线成员传送到你的位置'
+        - '&8▪ &7价格：&6{price} 城邦币'
+        - ''
+        - '&b▶ 点击购买并发起集结'
     reward_type: CITY_STATE_TP_ALL
     sell:
       price: 1000
@@ -77,11 +73,13 @@ items:
     index: 14
     icon:
       material: DIAMOND
-      display_name: '&f购买10个钻石'
+      display_name: '&b&l购买钻石补给'
       lores:
-        - ' &f这是个自定义物品'
-        - ' &f花费城邦币: {price}'
-        - ' &f购买10个钻石'
+        - ''
+        - '&7为当前玩家发放钻石补给'
+        - '&8▪ &7花费：&6{price} 城邦币'
+        - ''
+        - '&b▶ 点击购买'
     reward_type: COMMANDS
     sell:
       commands:
@@ -93,13 +91,13 @@ items:
     index: 50
     icon:
       material: ARROW
-      display_name: '&c返回'
+      display_name: '&c&l← 返回'
     reward_type: BACK
   '54':
     index: 54
     icon:
       material: BOOK
-      display_name: '&f下一页'
+      display_name: '&e&l下一页 →'
     reward_type: CITY_STATE_SHOP
     shop: Shop2
   '46':
@@ -107,6 +105,6 @@ items:
     reward_type: NONE
     icon:
       material: BOOK
-      display_name: '&f上一页'
+      display_name: '&8← 上一页'
       lores:
-        - ' &f无'
+        - '&8已经是第一页'

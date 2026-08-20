@@ -60,4 +60,26 @@ public class CityStatePlayerManager {
     public Collection<CityStatePlayer> getLoadedCityStatePlayers() {
         return cityStatePlayerMap.values();
     }
+
+    public CityStatePlayer findRegisteredPlayer(@NotNull String value) {
+        try {
+            UUID id = UUID.fromString(value);
+            return isRegistered(id) ? getCityStatePlayer(id) : null;
+        } catch (IllegalArgumentException ignored) { }
+        for (CityStatePlayer player : cityStatePlayerMap.values()) {
+            if (player.getName().equalsIgnoreCase(value)) return player;
+        }
+        File[] files = new File(plugin.getDataFolder(), "data" + File.separator + "players")
+                .listFiles((directory, name) -> name.endsWith(".yml"));
+        if (files == null) return null;
+        for (File file : files) {
+            try {
+                YamlConfiguration yaml = YamlFiles.load(file);
+                if (value.equalsIgnoreCase(yaml.getString("known_name"))) {
+                    return getCityStatePlayer(UUID.fromString(yaml.getString("uuid")));
+                }
+            } catch (RuntimeException ignored) { }
+        }
+        return null;
+    }
 }

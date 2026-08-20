@@ -3,145 +3,221 @@
 # 可供显示的位置，必须大于等于最大项目数，支持使用 - 作为范围界定符，使用,分隔
 indexes: '11-17,20-26,29-35'
 row: 6
-title: '&e&l我的城邦'
+title: '&8✦ &6&l我的城邦'
+other_items:
+  frame:
+    indexes: '1-9,10,18-19,27-28,36-37,45-54'
+    icon: {material: BLACK_STAINED_GLASS_PANE, display_name: ''}
 items:
   back:
     index: 50
     icon:
       material: ARROW
-      display_name: '&c返回'
+      display_name: '&c&l← 返回'
+      lores: ['&7返回上一级菜单']
   city_state_sign:
     available:
-      priority: 1
+      priority: 100
       icon:
         material: TORCH
-        display_name: '&d签到'
+        display_name: '&d&l每日签到'
         lores:
-          - ' &f100个 城邦币'
-          - ' &f100个 苹果'
+          - ''
+          - '&8▪ &7奖励：&f100 城邦币、100 苹果'
+          - '&8▪ &7额外：&d1 颗魔力石'
+          - ''
+          - '&d▶ 点击完成今日签到'
     unavailable:
-      priority: 1
+      priority: 100
       icon:
         material: REDSTONE_TORCH
-        display_name: '&d今日已签到'
+        display_name: '&8&l今日已签到'
         lores:
-          - ' &f已签到 {signed_count}次'
+          - ''
+          - '&8▪ &7累计签到：&f{signed_count} 次'
+          - '&8明天再来领取奖励吧'
   city_state_info:
-    priority: 0
+    priority: 90
     icon:
       material: PAPER
-      display_name: '&f城邦信息'
+      display_name: '&6&l城邦总览'
       use_papi: true
       lores:
-        - ' &f城邦名: {city_state_name}'
-        - ' &f会长: {city_state_owner}'
-        - ' &f城邦币储备: {city_state_gmoney}'
-        - ' &f人数: {city_state_member_count}/{city_state_max_member_count}'
-        - ' &f创建时间: {city_state_creation_time}'
+        - ''
+        - '&8▪ &7名称：&f{city_state_name}'
+        - '&8▪ &7会长：&f{city_state_owner}'
+        - '&8▪ &7成员：&f{city_state_member_count}&8/&f{city_state_max_member_count}'
+        - '&8▪ &7城邦币：&6{city_state_gmoney}'
+        - '&8▪ &7创建时间：&f{city_state_creation_time}'
   city_state_announcement:
     setter:
-      priority: -1
+      priority: 80
       icon:
         material: MAP
-        display_name: '&f设置城邦公告'
+        display_name: '&e&l城邦公告 · 可编辑'
         append_lores:
           - ''
-          - ' &f点击来设置'
-          - ' &f最多 {max} 条'
-          - ' &f使用 {split_str} 分隔'
+          - '&8━━━━━━━━━━━━━━'
+          - '&7最多可设置 &f{max} &7条'
+          - '&7使用 &f{split_str} &7分隔多条公告'
+          - ''
+          - '&e▶ 点击编辑公告'
     getter:
-      priority: -1
+      priority: 80
       icon:
         material: MAP
-        display_name: '&f城邦公告'
+        display_name: '&e&l城邦公告'
   self_info:
-    priority: -2
+    priority: 70
     icon:
       material: PLAYER_HEAD
       use_papi: true
-      display_name: '&f个人信息'
+      display_name: '&b&l我的城邦档案'
       lores:
-        - ' &fID: %player_name%'
-        - ' &f金币: %vault_eco_balance%'
-        - ' &f入会时间: {member_join_time}'
-        - ' &f已赞助城邦币: {member_donated_gmoney}'
+        - ''
+        - '&8▪ &7玩家：&f%player_name%'
+        - '&8▪ &7金币：&6%vault_eco_balance%'
+        - '&8▪ &7加入时间：&f{member_join_time}'
+        - '&8▪ &7累计贡献：&a{member_donated_gmoney} 城邦币'
   city_state_members:
     # 成员看到的图标
     member:
-      priority: -3
+      priority: 60
       icon:
         material: PLAYER_HEAD
         skull_texture: 'eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYWQwNzRiMjZiMDljNjdmZWVmZWE0ZTAyNDVmNjMzMDZlNDVjYjkzNWU5OGRiZmFhMzAyMGViNDBjNzA2OTcxOSJ9fX0='
-        display_name: '&f城邦成员'
+        display_name: '&b&l城邦成员'
+        lores: ['', '&7查看城邦成员名单与资料', '', '&e▶ 点击查看']
     # 有“管理”权限的成员看到的图标
     manager:
-      priority: -3
+      priority: 60
       icon:
         material: PLAYER_HEAD
         skull_texture: 'eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYWQwNzRiMjZiMDljNjdmZWVmZWE0ZTAyNDVmNjMzMDZlNDVjYjkzNWU5OGRiZmFhMzAyMGViNDBjNzA2OTcxOSJ9fX0='
-        display_name: '&f成员管理'
+        display_name: '&b&l成员管理'
+        lores: ['', '&7查看成员并调整管理权限', '', '&e▶ 点击管理']
   city_state_join_check:
-    priority: -4
+    priority: 50
     icon:
       material: PLAYER_HEAD
       skull_texture: 'eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjZhNWE0YjQ5MmNmMzg2MWQzMDQ0YTkxMWUxMzY0ZGFkZjdhMmJlNDFmYjJmOWE1YzYxOWRlNWNjOWE1YWYwMCJ9fX0='
-      display_name: '&f入会审批'
+      display_name: '&a&l入会审批'
+      lores: ['', '&7处理玩家提交的入会申请', '', '&e▶ 点击查看申请']
   city_state_donate:
-    priority: -5
+    priority: 40
     icon:
       material: DIAMOND
-      display_name: '&f捐赠'
+      display_name: '&a&l城邦捐赠'
       lores:
-        - ' &f捐赠城邦币'
+        - ''
+        - '&7向城邦金库注入发展资金'
+        - ''
+        - '&e▶ 点击选择捐赠方案'
   city_state_icon_repository:
-    priority: -5
+    priority: 30
     icon:
       material: ITEM_FRAME
-      display_name: '&f图标仓库'
+      display_name: '&e&l图标仓库'
+      lores: ['', '&7更换城邦在列表中的展示图标', '', '&e▶ 点击打开仓库']
   city_state_shop:
-    priority: -6
+    priority: 20
     icon:
       material: EMERALD
-      display_name: '&f城邦商店'
+      display_name: '&6&l城邦商店'
       lores:
-        - ' &f点击跳转'
+        - ''
+        - '&7使用城邦币购买升级与功能'
+        - ''
+        - '&e▶ 点击进入商店'
+  city_state_wish_tree:
+    priority: 15
+    icon:
+      material: AZALEA
+      display_name: '&d&l许愿树'
+      lores:
+        - ''
+        - '&7浇水成长、许下心愿并领取奖励'
+        - ''
+        - '&d▶ 点击进入许愿树'
+  city_state_guardian:
+    priority: 14
+    icon:
+      material: DRAGON_EGG
+      display_name: '&6&l城邦守护兽'
+      lores:
+        - ''
+        - '&7选择、喂养并共同孵化守护兽'
+        - ''
+        - '&6▶ 点击查看守护兽'
   city_state_spawn:
     available:
-      enabled: false
-      priority: -8
+      priority: 10
       icon:
         material: ENDER_PEARL
-        display_name: '&f传送到主城'
-    unavailable:
-      enabled: false
-      priority: -8
-      icon:
-        material: ENDER_PEARL
-        display_name: '&f传送到主城'
+        display_name: '&b&l进入／离开城邦世界'
         lores:
-          - ' &c未设置'
+          - ''
+          - '&7在主世界与城邦世界之间切换'
+          - '&7目标：城邦公共建筑出生点'
+          - ''
+          - '&b▶ 点击开始传送'
+    unavailable:
+      priority: 10
+      icon:
+        material: BARRIER
+        display_name: '&c&l城邦世界不可用'
+        lores:
+          - '&7世界当前处于异常状态'
+          - '&c请联系管理员检查世界生命周期'
+  city_state_visibility:
+    private:
+      priority: 9
+      icon:
+        material: OAK_DOOR
+        display_name: '&e&l访问权限：私有'
+        lores:
+          - ''
+          - '&7仅成员和管理员可以进入'
+          - ''
+          - '&e▶ 点击切换为公开'
+    public:
+      priority: 9
+      icon:
+        material: IRON_DOOR
+        display_name: '&a&l访问权限：公开'
+        lores:
+          - ''
+          - '&7访客可以进入参观，但不能建设'
+          - ''
+          - '&e▶ 点击切换为私有'
   city_state_set_member_damage:
     turn_off:
-      priority: -9
+      priority: 8
       icon:
         material: WOODEN_SWORD
-        display_name: '&f关闭成员PVP'
+        display_name: '&c&l成员 PVP：开启'
+        lores: ['', '&7成员之间当前可以互相造成伤害', '', '&e▶ 点击关闭 PVP']
     turn_on:
-      priority: -9
+      priority: 8
       icon:
         material: WOODEN_SWORD
-        display_name: '&f打开成员PVP'
+        display_name: '&a&l成员 PVP：关闭'
+        lores: ['', '&7成员之间当前不会互相造成伤害', '', '&e▶ 点击开启 PVP']
   city_state_leave:
     priority: -999
     icon:
       material: BARRIER
-      display_name: '&c退出城邦'
+      display_name: '&c&l退出城邦'
       lores:
-        - ' &c请谨慎操作'
+        - ''
+        - '&7离开后将失去本城邦成员身份'
+        - '&c⚠ 此操作需要聊天确认'
   city_state_delete:
     priority: -999
     icon:
       material: BARRIER
-      display_name: '&c解散城邦'
+      display_name: '&4&l解散城邦'
       lores:
-        - ' &c请谨慎操作'
+        - ''
+        - '&7归档世界并永久解散当前城邦'
+        - '&4⚠ 高危操作，需要聊天确认'

@@ -2,6 +2,7 @@ package com.cuzz.rookiecitystate.internal.item;
 
 import com.destroystokyo.paper.profile.ProfileProperty;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -71,9 +72,10 @@ public class ItemBuilder {
 
     private Component component(String text) {
         String value = text == null ? "" : text;
-        return colored
+        Component result = colored
                 ? LegacyComponentSerializer.legacyAmpersand().deserialize(value.replace('§', '&'))
                 : Component.text(value);
+        return result.decoration(TextDecoration.ITALIC, false);
     }
 
     public static boolean isItemFlagEnabled() { return true; }

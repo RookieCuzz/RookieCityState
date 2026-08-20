@@ -1,22 +1,62 @@
-title: '&e&l城邦-{city_state_name}'
+title: '&8✦ &6&l城邦详情 &8· &f{city_state_name}'
 row: 3
+other_items:
+  frame:
+    indexes: '1-9,10,18-27'
+    icon: {material: BLACK_STAINED_GLASS_PANE, display_name: ''}
 items:
   back:
     index: 27
     icon:
      material: ARROW
-     display_name: '&c返回'
+     display_name: '&c&l← 返回'
+     lores: ['&7返回城邦列表']
   members:
     index: 12
     icon:
      material: PLAYER_HEAD
      skull_texture: 'eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZWNmMjU4NDRmZjlhZTJiMjNhYjZiODZhNGJhNmRkZDcxNGEwYjBjMTMzODY4N2QyYmI4NTFiYTljNDMyMGFhOSJ9fX0='
-     display_name: '&f成员列表'
+     display_name: '&b&l成员列表'
+     lores: ['', '&7查看该城邦的成员与职位信息', '', '&e▶ 点击查看']
   request_join:
     index: 16
     icon:
      material: DIAMOND_CHESTPLATE
-     display_name: '&f申请加入'
+     display_name: '&a&l申请加入'
+     lores: ['', '&7向该城邦管理成员提交申请', '', '&a▶ 点击发送申请']
      flags:
        - 'HIDE_ATTRIBUTES'
        - 'HIDE_ENCHANTS'
+  visit:
+    index: 14
+    icon:
+      material: ENDER_PEARL
+      display_name: '&b&l参观城邦'
+      lores:
+        - ''
+        - '&7访客仅可参观，不能修改世界'
+        - '&7连续参观可解锁本周点赞资格'
+        - ''
+        - '&b▶ 点击传送至城邦'
+  social_like:
+    locked:
+      index: 15
+      icon: {material: GRAY_DYE, display_name: '&8&l点赞尚未解锁', lores: ['', '&8▪ &7解锁条件：连续参观 &f{social_qualification_seconds} 秒', '&8▪ &7历史总赞：&f{social_total_likes}', '&8▪ &7七日热度：&d{social_hot_score}', '', '&8完成参观后即可点赞']}
+    qualified:
+      index: 15
+      icon: {material: MAGENTA_DYE, display_name: '&d&l为城邦点赞', lores: ['', '&8▪ &7本周剩余：&f{social_votes_remaining} 票', '&8▪ &7历史总赞：&f{social_total_likes}', '', '&d▶ 点击进入确认']}
+    liked:
+      index: 15
+      icon: {material: PINK_DYE, display_name: '&d&l本周已点赞', lores: ['', '&8▪ &7历史总赞：&f{social_total_likes}', '&8▪ &7七日点赞：&d{social_7d_likes}', '', '&7感谢你为这座城邦助力']}
+    no_votes:
+      index: 15
+      icon: {material: RED_DYE, display_name: '&c&l本周票数已用完', lores: ['', '&8▪ &7历史总赞：&f{social_total_likes}', '', '&7下周刷新点赞票数']}
+    unavailable:
+      index: 15
+      icon: {material: BARRIER, display_name: '&c&l当前无法点赞', lores: ['', '&7该城邦当前不满足点赞条件']}
+    member:
+      index: 15
+      icon: {material: PLAYER_HEAD, display_name: '&8&l这是你的城邦', lores: ['', '&7不能为自己的城邦点赞', '&8▪ &7历史总赞：&f{social_total_likes}']}
+    error:
+      index: 15
+      icon: {material: BARRIER, display_name: '&c&l社交数据暂不可用', lores: ['', '&7请稍后重新打开此界面']}

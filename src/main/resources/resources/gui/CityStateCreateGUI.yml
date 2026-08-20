@@ -1,62 +1,87 @@
 row: 3 # move marker
-title: '&e&l请选择支付方式'
+title: '&8✦ &6&l创建城邦 · 选择支付方式'
+other_items:
+  frame:
+    indexes: '1-9,10-11,13-15,17-27'
+    icon: {material: BLACK_STAINED_GLASS_PANE, display_name: ''}
 items:
   money:
     index: 12
     icon:
       use_papi: true
       material: GOLD_INGOT
-      display_name: '&a使用 &e{price}个 &a金币'
+      display_name: '&6&l使用金币创建'
       lores:
-        - ' &f拥有: %vault_eco_balance%个'
-        - ' &f城邦名: {name}'
-        - ' &c点击支付'
+        - ''
+        - '&8▪ &7城邦名称：&f{name}'
+        - '&8▪ &7创建价格：&6{price} 金币'
+        - '&8▪ &7当前持有：&f%vault_eco_balance%'
+        - ''
+        - '&e▶ 点击选择金币支付'
     ConfirmGUI:
       row: 3
-      title: '&c&l确认'
+      title: '&8✦ &c&l确认创建城邦'
+      other_items:
+        frame:
+          indexes: '1-9,10-13,15-27'
+          icon: {material: RED_STAINED_GLASS_PANE, display_name: ''}
       items:
         confirm:
           index: 14
           icon:
             material: NETHER_STAR
-            display_name: '&a确认支付'
+            display_name: '&a&l✔ 确认支付'
             lores:
-              - ' &e支付方式: 金币'
-              - ' &e金额: {price}'
+              - ''
+              - '&8▪ &7支付方式：&6金币'
+              - '&8▪ &7支付金额：&f{price}'
+              - ''
+              - '&a▶ 点击确认创建'
         cancel:
           index: 27
           icon:
             material: ARROW
-            display_name: '&c返回'
+            display_name: '&c&l← 取消并返回'
   points:
     index: 16
     icon:
       use_papi: true
       material: DIAMOND
-      display_name: '&a使用 &e{price}个 &a点券'
+      display_name: '&b&l使用点券创建'
       lores:
-        - ' &f拥有: %playerpoints_points%个'
-        - ' &f城邦名: {name}'
-        - ' &c点击支付'
+        - ''
+        - '&8▪ &7城邦名称：&f{name}'
+        - '&8▪ &7创建价格：&b{price} 点券'
+        - '&8▪ &7当前持有：&f%playerpoints_points%'
+        - ''
+        - '&b▶ 点击选择点券支付'
     ConfirmGUI:
       row: 3
-      title: '&c&l确认'
+      title: '&8✦ &c&l确认创建城邦'
+      other_items:
+        frame:
+          indexes: '1-9,10-13,15-27'
+          icon: {material: RED_STAINED_GLASS_PANE, display_name: ''}
       items:
         confirm:
           index: 14
           icon:
             material: NETHER_STAR
-            display_name: '&a确认支付'
+            display_name: '&a&l✔ 确认支付'
             lores:
-              - ' &e支付方式: 点券'
-              - ' &e金额: {price}'
+              - ''
+              - '&8▪ &7支付方式：&b点券'
+              - '&8▪ &7支付金额：&f{price}'
+              - ''
+              - '&a▶ 点击确认创建'
         cancel:
           index: 27
           icon:
             material: ARROW
-            display_name: '&c返回'
+            display_name: '&c&l← 取消并返回'
   back:
     index: 27
     icon:
       material: ARROW
-      display_name: '&c返回'
+      display_name: '&c&l← 返回'
+      lores: ['&7返回城邦大厅']
